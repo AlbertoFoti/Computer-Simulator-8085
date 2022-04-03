@@ -1,2 +1,5 @@
-# 8085-Processor-Emulator
-8085 processor visual emulator. Desktop GUI version.
+# Computer Architecture Simulator
+## MIPS Processor
+## Computer Architecture
+## MIPS Assembler
+## Basic Operating System (OS) running
