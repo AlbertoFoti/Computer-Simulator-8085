@@ -6,6 +6,8 @@
 #include <iostream>
 #include <string>
 
+#include "Core/computer.hpp"
+
 // GUI manager
 class GuiManager {
 public:

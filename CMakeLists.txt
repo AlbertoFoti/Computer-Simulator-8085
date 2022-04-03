@@ -10,6 +10,10 @@ set(CPACK_PROJECT_NAME ${PROJECT_NAME})
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
 include(CPack)
 
+add_subdirectory("Core")
+
+target_link_libraries(${PROJECT_NAME} PRIVATE Computer)
+
 find_package(imgui CONFIG REQUIRED)
 target_link_libraries(${PROJECT_NAME} PRIVATE imgui::imgui)
 
