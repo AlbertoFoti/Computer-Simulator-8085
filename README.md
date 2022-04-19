@@ -7,12 +7,12 @@ Current Version : *0.0.0*
 
 ### Version 0.0.1 Objectives 
 - Project modular structure setup
-- Work on MIPS processor simulator
+- Work on 8085 processor simulator
 
 ### Version 0.0.0 Features
 - Basic GUI (empty)
 
-## MIPS Processor
+## Intel 8085 Processor
 ## Computer Architecture
-## MIPS Assembler
+## Intel 8085 Assembler
 ## Basic Operating System (OS) running

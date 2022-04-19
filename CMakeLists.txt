@@ -1,10 +1,10 @@
 cmake_minimum_required(VERSION 3.0.0)
-project(COMPUTER-SIMULATOR-MIPS VERSION 0.1.0)
+project(COMPUTER-SIMULATOR-INTEL_8085 VERSION 0.1.0)
 
 include(CTest)
 enable_testing()
 
-add_executable(COMPUTER-SIMULATOR-MIPS WIN32 main.cpp gui_main.hpp gui_main.cpp)
+add_executable(COMPUTER-SIMULATOR-INTEL_8085 WIN32 main.cpp gui_main.hpp gui_main.cpp)
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})

@@ -1,6 +1,6 @@
 add_library(
 	Memory
-	ram.hpp ram.cpp
+	memory.hpp memory.cpp
 )
 
 find_package(imgui CONFIG REQUIRED)

@@ -16,6 +16,9 @@ void GuiManager::Init(GLFWwindow* window, const char* glsl_version)
 	ImGui_ImplGlfw_InitForOpenGL(window, true);
 	ImGui_ImplOpenGL3_Init(glsl_version);
 	ImGui::StyleColorsDark();
+
+    // Computer inits
+    MipsComputer = std::make_shared<Computer>();
 }
 
 void GuiManager::Update() 

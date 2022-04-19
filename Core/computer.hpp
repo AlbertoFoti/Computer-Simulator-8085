@@ -1,8 +1,10 @@
 #pragma once
 
+#include <iostream>
+
 #include "Bus/bus.hpp"
-#include "MipsProcessor/mips32.hpp"
-#include "Memory/ram.hpp"
+#include "MipsProcessor/intel8085.hpp"
+#include "Memory/memory.hpp"
 
 class Computer
 {
@@ -12,6 +14,7 @@ private:
 public:
 	/* Constructor */
 	Computer();
+
 	/* Entry point for system execution */
 	void run();
 };

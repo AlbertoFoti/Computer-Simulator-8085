@@ -28,7 +28,7 @@ int WinMain(
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
 
 	// Create window with graphics context
-	GLFWwindow* window = glfwCreateWindow(1280, 720, "Financial Planner", NULL, NULL);
+	GLFWwindow* window = glfwCreateWindow(1280, 720, "Computer Emulator - MIPS", NULL, NULL);
 	if (window == NULL) {
 		return 1;
 	}

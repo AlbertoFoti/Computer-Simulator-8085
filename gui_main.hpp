@@ -10,6 +10,9 @@
 
 // GUI manager
 class GuiManager {
+private:
+	std::shared_ptr<Computer> MipsComputer;
+		
 public:
 	void Init(GLFWwindow *window, const char* glsl_version);
 	virtual void Update();
