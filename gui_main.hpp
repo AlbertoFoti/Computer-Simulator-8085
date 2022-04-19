@@ -11,7 +11,7 @@
 // GUI manager
 class GuiManager {
 private:
-	std::shared_ptr<Computer> MipsComputer;
+	std::shared_ptr<Computer> computer;
 		
 public:
 	void Init(GLFWwindow *window, const char* glsl_version);
@@ -24,6 +24,7 @@ public:
 private:
 	// Views
 	void ShowDemoWindow();
+	void ShowMemory();
 
 	// Helper Functions
 	void HelpMarker(const char* desc);

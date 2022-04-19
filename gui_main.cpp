@@ -18,7 +18,7 @@ void GuiManager::Init(GLFWwindow* window, const char* glsl_version)
 	ImGui::StyleColorsDark();
 
     // Computer inits
-    MipsComputer = std::make_shared<Computer>();
+    computer = std::make_shared<Computer>();
 }
 
 void GuiManager::Update() 
@@ -98,6 +98,7 @@ void GuiManager::Update()
     // Your GUIs go Here !
     ImGui::ShowDemoWindow();
     this->ShowDemoWindow();
+    this->ShowMemory();
 
     ImGui::End();
 }
@@ -125,16 +126,22 @@ void GuiManager::NewFrame()
 	ImGui::NewFrame();
 }
 
-// Other helper Functions ================================================
+// Views =================================================================
 void GuiManager::ShowDemoWindow()
 {
     ImGui::Begin("Testing");
+    ImGui::End();
+}
 
+void GuiManager::ShowMemory() {
+    ImGui::Begin("Memory");
 
+    
 
     ImGui::End();
 }
 
+// Other helper Functions ================================================
 void GuiManager::HelpMarker(const char* desc)
 {
     ImGui::TextDisabled("(?)");

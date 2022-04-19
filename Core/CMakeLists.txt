@@ -3,11 +3,11 @@ add_library(
 	computer.hpp computer.cpp
 )
 
-add_subdirectory("MipsProcessor")
+add_subdirectory("Intel8085Processor")
 add_subdirectory("Memory")
 add_subdirectory("Bus")
 
-target_link_libraries(Computer PRIVATE MipsProcessor)
+target_link_libraries(Computer PRIVATE Intel8085Processor)
 target_link_libraries(Computer PRIVATE Memory)
 target_link_libraries(Computer PRIVATE Bus)
 

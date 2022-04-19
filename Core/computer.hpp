@@ -3,7 +3,7 @@
 #include <iostream>
 
 #include "Bus/bus.hpp"
-#include "MipsProcessor/intel8085.hpp"
+#include "Intel8085Processor/intel8085.hpp"
 #include "Memory/memory.hpp"
 
 class Computer
