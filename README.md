@@ -1,13 +1,22 @@
 # Computer Architecture Simulator
 
-Current Version : *0.0.0*
+Current Version : *0.0.1*
+
+### Future Objectives
+- Assembler
+- Program Loading
+- Basic OS boot
 
 ### Version 0.1.0 Objectives
 - Basic CPU emulation
 
-### Version 0.0.1 Objectives 
+### Version 0.0.2 Objectives
+- 8085 Processor basic implementation
+- Bus system implementation
+
+### Version 0.0.1 Features 
 - Project modular structure setup
-- Work on 8085 processor simulator
+- Memory unit implementation
 
 ### Version 0.0.0 Features
 - Basic GUI (empty)
