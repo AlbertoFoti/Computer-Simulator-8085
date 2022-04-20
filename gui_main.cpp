@@ -136,7 +136,13 @@ void GuiManager::ShowDemoWindow()
 void GuiManager::ShowMemory() {
     ImGui::Begin("Memory");
 
+    static bool show_memory = false;
+    if(ImGui::Button("Toggle Print Memory Layout")) {
+        show_memory = !show_memory;
+    }
     
+    if(show_memory) 
+        this->computer->run();
 
     ImGui::End();
 }

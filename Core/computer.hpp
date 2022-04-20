@@ -10,6 +10,7 @@ class Computer
 {
 private:
 	/* CPU, Memory, Bus modules */
+	Memory* ram;
 
 public:
 	/* Constructor */

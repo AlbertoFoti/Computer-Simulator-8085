@@ -4,7 +4,7 @@
 	Constructor 
 */
 Computer::Computer() {
-	
+	this->ram = new Memory();
 }
 
 /* 
@@ -12,4 +12,5 @@ Computer::Computer() {
 */
 void Computer::run() {
 	// Todo
+	this->ram->print();
 }
