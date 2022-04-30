@@ -22,6 +22,13 @@ Current Version : *0.0.1*
 - Basic GUI (empty)
 
 ## Intel 8085 Processor
+- Work in progress...
+
 ## Computer Architecture
+- Work in progress...
+
 ## Intel 8085 Assembler
+- Future versions...
+
 ## Basic Operating System (OS) running
+- Future versions...
