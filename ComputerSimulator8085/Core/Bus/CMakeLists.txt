@@ -1,6 +1,6 @@
 add_library(
 	Bus
-	bus.hpp bus.cpp
+		Bus.hpp Bus.cpp
 )
 
 find_package(imgui CONFIG REQUIRED)

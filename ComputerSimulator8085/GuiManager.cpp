@@ -1,4 +1,4 @@
-#include "GuiManager.h"
+#include "GuiManager.hpp"
 
 #define IM_CLAMP(V, MN, MX)     ((V) < (MN) ? (MN) : (V) > (MX) ? (MX) : (V))
 
@@ -145,6 +145,8 @@ void GuiManager::Update()
     //this->ShowFontTesting();
     this->ShowMainView();
     this->ShowMemory();
+    this->ShowBus();
+    this->ShowCPU();
 
     ImGui::End();
 }
@@ -176,7 +178,23 @@ void GuiManager::NewFrame()
 void GuiManager::ShowMemory() {
     ImGui::Begin("Memory");
 
-    this->computer->print_memory();
+    this->computer->printMemory();
+
+    ImGui::End();
+}
+
+void GuiManager::ShowBus() {
+    ImGui::Begin("Bus");
+
+    this->computer->printBus();
+
+    ImGui::End();
+}
+
+void GuiManager::ShowCPU() {
+    ImGui::Begin("Intel8085");
+
+    this->computer->run();
 
     ImGui::End();
 }

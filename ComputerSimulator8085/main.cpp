@@ -1,4 +1,4 @@
-#include "GuiManager.h"
+#include "GuiManager.hpp"
 
 // OpenGL glad, GLFW  (Renderer)
 #include "glad/glad.h"
@@ -26,7 +26,7 @@ int main()
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
 
 	// Create window with graphics context
-	GLFWwindow* window = glfwCreateWindow(1280, 720, "Financial Planner", NULL, NULL);
+	GLFWwindow* window = glfwCreateWindow(1280, 720, "Intel 8085 Emulator", NULL, NULL);
 	if (window == NULL) {
 		return 1;
 	}

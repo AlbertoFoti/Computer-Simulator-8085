@@ -2,16 +2,18 @@
 
 #include <iostream>
 
-#include "Bus/bus.hpp"
+#include "Bus/Bus.hpp"
 #include "Intel8085Processor/intel8085.hpp"
-#include "Memory/memory.hpp"
+#include "Memory/Memory.hpp"
 #include <memory>
 
 class Computer
 {
 private:
 	/* CPU, Memory, Bus modules */
+    std::shared_ptr<CPU> intel8085cpu;
 	std::shared_ptr<Memory> ram;
+    std::shared_ptr<Bus> bus;
 
 public:
 	/* Constructor */
@@ -20,6 +22,9 @@ public:
 	/* Entry point for system execution */
 	void run();
 
-    Memory& get_memory();
-    void print_memory();
+    /* step execution */
+    void step();
+
+    void printMemory();
+    void printBus();
 };

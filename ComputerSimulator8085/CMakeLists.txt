@@ -2,7 +2,7 @@
 
 set(Sources 
     "GuiManager.cpp"
-    "GuiManager.h")
+    "GuiManager.hpp")
 
 # Packages (Dependencies)
 find_package(glad CONFIG REQUIRED)
