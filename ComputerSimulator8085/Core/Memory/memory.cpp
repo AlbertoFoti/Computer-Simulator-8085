@@ -1,29 +1,25 @@
 #include "memory.hpp"
 
-/*
-	Constructor
-*/
 Memory::Memory() {
-	this->mem = new uint8_t[MEM_DIM];
-	for (int i = 0; i < MEM_DIM; i++) {
-		this->mem[i] = 0;
-	}
+    this->mem.fill({});
 	this->ADDR_LATCH = 0x0000;
+}
+
+Memory::~Memory() {
+
 }
 
 /* 
 	load memory layout into memory 
 */
-void Memory::load(uint8_t memLayout[MEM_DIM]) {
-	for (int i = 0; i < MEM_DIM; i++) {
-		this->mem[i] = memLayout[i];
-	}
+void Memory::load(std::array<uint8_t, MEM_DIM> memLayout) {
+    std::copy(std::begin(memLayout), std::end(memLayout), std::begin(this->mem));
 }
 
 /* 
 	load program into a precise memory sector
 */
-void Memory::loadProgram(uint8_t program[PROGRAM_DIM], int sector) {
+void Memory::loadProgram(std::array<uint8_t, MEM_DIM> program, int sector) {
 	if (sector >= (MEM_DIM / PROGRAM_DIM)) {
 		std::cout << "\n\n --- Error --- __PROGRAM_INVALID_LOADING_SECTOR_LIMIT_EXCEDEED__ \n\n";
 		return;
