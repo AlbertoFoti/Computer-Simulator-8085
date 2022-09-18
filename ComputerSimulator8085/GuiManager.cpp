@@ -145,6 +145,7 @@ void GuiManager::Update()
     //this->ShowFontTesting();
     this->ShowMainView();
     this->ShowMemory();
+    this->ShowBus();
 
     ImGui::End();
 }
@@ -176,7 +177,15 @@ void GuiManager::NewFrame()
 void GuiManager::ShowMemory() {
     ImGui::Begin("Memory");
 
-    this->computer->print_memory();
+    this->computer->printMemory();
+
+    ImGui::End();
+}
+
+void GuiManager::ShowBus() {
+    ImGui::Begin("Bus");
+
+    this->computer->printBus();
 
     ImGui::End();
 }

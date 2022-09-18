@@ -45,7 +45,7 @@ public:
 	void Render();
 
 	/**
-	 * @brief Shutsdown ImGui and ImPlot context, rendering API cleanup.
+	 * @brief Shuts down ImGui and ImPlot context, rendering API cleanup.
 	 * 
 	 */
 	void Shutdown();
@@ -61,6 +61,11 @@ private:
      * @brief Show Memory Layout
      */
     void ShowMemory();
+
+    /**
+     * @brief Show Bus Data
+     */
+    void ShowBus();
 
 	/**
 	 * @brief Central View Rendering

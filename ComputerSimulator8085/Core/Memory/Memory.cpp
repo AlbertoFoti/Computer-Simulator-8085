@@ -1,4 +1,4 @@
-#include "memory.hpp"
+#include "Memory.hpp"
 
 Memory::Memory() {
     this->mem.fill({});
@@ -56,13 +56,11 @@ void Memory::set(uint8_t DATA) {
 
 void Memory::print() {
 	static char hex_string[20];
-	
-    ImGui::Text("-------MEMORY-----------");
 
+    /*
 	for (int i = 0; i < MEM_DIM; i++) {
 		sprintf(hex_string, "%.2X", this->mem[i]);
 
-        /*
 		std::cout << hex_string << " ";
 		if (i % 8 == 7 ) {
 			if (i % 16 == 15) {
@@ -72,8 +70,8 @@ void Memory::print() {
 				std::cout << " ";
 			}
 		}
-         */
 	}
+    */
 
     for (int x = 0; x < 32; x++)
         for (int y = 0; y < 16; y++)

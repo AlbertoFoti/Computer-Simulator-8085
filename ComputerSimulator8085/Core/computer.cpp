@@ -5,6 +5,7 @@
 */
 Computer::Computer() {
 	this->ram = std::make_shared<Memory>();
+    this->bus = std::make_shared<Bus>();
 }
 
 /* 
@@ -16,10 +17,10 @@ void Computer::run() {
     std::cout << "Computer Running..." << std::endl;
 }
 
-Memory& Computer::get_memory() {
-    return (Memory&) this->ram;
+void Computer::printMemory() {
+    this->ram->print();
 }
 
-void Computer::print_memory() {
-    this->ram->print();
+void Computer::printBus() {
+    this->bus->print();
 }
