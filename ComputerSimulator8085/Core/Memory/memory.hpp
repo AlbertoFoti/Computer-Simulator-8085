@@ -3,7 +3,7 @@
 #include <iostream>
 #include <string>
 #include <cstdint>
-#include "ImGui.h"
+#include "imgui.h"
 
 #define MEM_DIM 512
 #define PROGRAM_DIM 128

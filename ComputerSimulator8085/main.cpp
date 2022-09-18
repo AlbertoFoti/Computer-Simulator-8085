@@ -1,22 +1,20 @@
-#include "gui_main.hpp"
+#include "GuiManager.h"
 
-// OpenGL glad, GLFW  (Window, Renderer)
-#include "windows.h"
+// OpenGL glad, GLFW  (Renderer)
 #include "glad/glad.h"
 #include "GLFW/glfw3.h"
 
-/***
-*  ============
-*    MAIN
-* 
-*  ============ 
-*/
-int WinMain(
-	HINSTANCE hInsstance,
-	HINSTANCE hPrevInstance,
-	LPSTR lcCmdLine,
-	int nShowCmd
-)
+/**
+ * @brief Main : Entry point for program control (update and render loop)
+ * Prepares window and other graphical components through some rendering API (ex. glfw/opengl3/glad, Vulkan, DirectX)
+ * 
+ * @param hInsstance 
+ * @param hPrevInstance 
+ * @param lcCmdLine 
+ * @param nShowCmd 
+ * @return int 
+ */
+int main()
 {
 	// Setup Window
 	if (!glfwInit())
@@ -28,7 +26,7 @@ int WinMain(
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
 
 	// Create window with graphics context
-	GLFWwindow* window = glfwCreateWindow(1280, 720, "Computer Emulator - MIPS", NULL, NULL);
+	GLFWwindow* window = glfwCreateWindow(1280, 720, "Financial Planner", NULL, NULL);
 	if (window == NULL) {
 		return 1;
 	}
@@ -45,21 +43,21 @@ int WinMain(
 	glViewport(0, 0, screen_width, screen_height);
 
 	// Financial Planner Instantiation
-	GuiManager myGuiManager;
+	GuiManager myGUImanager;
 
 	// Financial Planner core (Init(), Update(), Render(), Shutdown())
-	myGuiManager.Init(window, glsl_version);
+    myGUImanager.Init(window, glsl_version);
 	while (!glfwWindowShouldClose(window)) {
 		glfwPollEvents();
 		glClearColor(0.45f, 0.55f, 0.60f, 1.00f);
 		glClear(GL_COLOR_BUFFER_BIT);
 
-		myGuiManager.NewFrame();
-		myGuiManager.Update();
-		myGuiManager.Render();
+        myGUImanager.NewFrame();
+        myGUImanager.Update();
+        myGUImanager.Render();
 		glfwSwapBuffers(window);
 	}
-	myGuiManager.Shutdown();
+    myGUImanager.Shutdown();
 
 	return 0;
 }

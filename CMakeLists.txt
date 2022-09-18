@@ -1,24 +1,13 @@
-cmake_minimum_required(VERSION 3.0.0)
-project(COMPUTER-SIMULATOR-INTEL_8085 VERSION 0.1.0)
+﻿cmake_minimum_required (VERSION 3.8)
+
+project ("ComputerSimulator8085")
 
 include(CTest)
 enable_testing()
-
-add_executable(COMPUTER-SIMULATOR-INTEL_8085 WIN32 main.cpp gui_main.hpp gui_main.cpp)
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
 include(CPack)
 
-add_subdirectory("Core")
-
-target_link_libraries(${PROJECT_NAME} PRIVATE Computer)
-
-find_package(imgui CONFIG REQUIRED)
-target_link_libraries(${PROJECT_NAME} PRIVATE imgui::imgui)
-
-find_package(glfw3 CONFIG REQUIRED)
-target_link_libraries(${PROJECT_NAME} PRIVATE glfw)
-
-find_package(glad CONFIG REQUIRED)
-target_link_libraries(${PROJECT_NAME} PRIVATE glad::glad)
+# Include subdirectories
+add_subdirectory ("ComputerSimulator8085")

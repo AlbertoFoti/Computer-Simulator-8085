@@ -64,9 +64,10 @@ void Memory::print() {
     ImGui::Text("-------MEMORY-----------");
 
 	for (int i = 0; i < MEM_DIM; i++) {
-		sprintf_s(hex_string, "%.2X", this->mem[i]);
-		std::cout << hex_string << " ";
+		sprintf(hex_string, "%.2X", this->mem[i]);
 
+        /*
+		std::cout << hex_string << " ";
 		if (i % 8 == 7 ) {
 			if (i % 16 == 15) {
 				std::cout << std::endl;
@@ -74,8 +75,8 @@ void Memory::print() {
 			else {
 				std::cout << " ";
 			}
-
 		}
+         */
 	}
 
     for (int x = 0; x < 32; x++)
@@ -87,7 +88,7 @@ void Memory::print() {
                 ImGui::SetCursorPosX(ImGui::GetCursorPosX() + PADDING);
             if (y == 0) {
                 //ImGui::PushID(-2000000 + x * 4 + y);
-                sprintf_s(hex_string, "%.4X", x*16 + y);
+                sprintf(hex_string, "%.4X", x*16 + y);
                 if (ImGui::Selectable(hex_string, false, 0, ImVec2(40, 20)))
                 {
                     
@@ -96,7 +97,7 @@ void Memory::print() {
             }
 
             ImGui::PushID(x * 4 + y);
-            sprintf_s(hex_string, "%.2X", this->mem[x*16 + y]);
+            sprintf(hex_string, "%.2X", this->mem[x*16 + y]);
             if (ImGui::Selectable(hex_string, false, 0, ImVec2(20, 20)))
             {
                 
