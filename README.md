@@ -17,12 +17,10 @@ Current Version : *0.1.0*
 ### Version 0.1.0 Features
 - Project cleanup and better setup
 
-### Version 0.0.1 Features 
+### Version 0.0.x Features
+- Basic GUI (empty)
 - Project modular structure setup
 - Memory unit implementation
-
-### Version 0.0.0 Features
-- Basic GUI (empty)
 
 # Intel 8085 Processor
 - Work in progress...
