@@ -67,6 +67,11 @@ private:
      */
     void ShowBus();
 
+    /**
+     * @brief Show CPU internal state
+     */
+    void ShowCPU();
+
 	/**
 	 * @brief Central View Rendering
 	 * 
