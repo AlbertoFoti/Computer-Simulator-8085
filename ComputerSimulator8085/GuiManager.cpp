@@ -140,7 +140,7 @@ void GuiManager::Update()
     }
 
     // Your GUIs go Here !
-    this->ShowDemoWindow();
+    //this->ShowDemoWindow();
     //this->ShowDemoPlot();
     //this->ShowFontTesting();
     //this->ShowMainView();
