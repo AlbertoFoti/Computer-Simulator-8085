@@ -1,30 +1,7 @@
 #include "intel8085.hpp"
 
 CPU::CPU() {
-    /* Register cleared */
-    this->PC = 0x0000;
-    this->SP = 0x0000;
-    this->IR = 0x00;
-    this->FR = 0x00;
-    this->temp = 0x00;
-    this->regA = 0x00;
-    this->regB = 0x00;
-    this->regC = 0x00;
-    this->regD = 0x00;
-    this->regE = 0x00;
-    this->regH = 0x00;
-    this->regL = 0x00;
-
-    /* Buffers cleared */
-    this->addrDataBuffer = 0x00;
-    this->highAddrBuffer = 0x00;
-
-    this->CTRL_SIG.iom = 0;
-    this->CTRL_SIG.S0 = 0;
-    this->CTRL_SIG.S1 = 0;
-    this->CTRL_SIG.ALE = 0;
-    this->CTRL_SIG.RDbar = 1;
-    this->CTRL_SIG.WRbar = 1;
+    this->reset();
 
     /* Lookup Instruction Table : 256 possible instructions/opcodes */
     using a = CPU;
@@ -55,32 +32,63 @@ CPU::~CPU() {}
 /*
 	Execution entry point
 */
-void CPU::run() {
-    return;
-
-    char ans = 'N';
+uint32_t CPU::run(bool& running) {
     do {
-        this->step();
-
-        // Check end Program (HLT Instruction)
-        if (endProgram == true) {
-            break;
+        uint32_t status_code = this->step();
+        if( status_code != 0x00000000 ) {
+            running = false;
+            return status_code;
         }
-
-        // User input to continue to next cycle
-        std::cout << "> Do you want to continue (Y/N)?\n";
-        std::cout << "> You must type a 'Y' or an 'N' :";
-        std::cin >> ans;
-
-    } while ((ans == 'Y') || (ans == 'y'));
+    } while (running == true);
+    running = false;
 }
 
-void CPU::step() {
+uint32_t CPU::step() {
+    if(this->PC > MEM_DIM ) {
+        return 0x00000010;
+    }
+
     // ------ Fetch ------
     this->OFMC();
 
     // ------ Execute ------
     this->execute();
+
+    if(this->endProgram) {
+        return 0x00000001;
+    }
+
+    return 0x00000000;
+}
+
+void CPU::reset() {
+    this->PC = 0x0000;
+    this->endProgram = false;
+
+    /* Register cleared */
+    this->PC = 0x0000;
+    this->SP = 0x0000;
+    this->IR = 0x00;
+    this->FR = 0x00;
+    this->temp = 0x00;
+    this->regA = 0x00;
+    this->regB = 0x00;
+    this->regC = 0x00;
+    this->regD = 0x00;
+    this->regE = 0x00;
+    this->regH = 0x00;
+    this->regL = 0x00;
+
+    /* Buffers cleared */
+    this->addrDataBuffer = 0x00;
+    this->highAddrBuffer = 0x00;
+
+    this->CTRL_SIG.iom = 0;
+    this->CTRL_SIG.S0 = 0;
+    this->CTRL_SIG.S1 = 0;
+    this->CTRL_SIG.ALE = 0;
+    this->CTRL_SIG.RDbar = 1;
+    this->CTRL_SIG.WRbar = 1;
 }
 
 /*

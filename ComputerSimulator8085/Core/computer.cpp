@@ -9,21 +9,46 @@ Computer::Computer() {
     this->bus = std::make_shared<Bus>();
 
     this->bus->attach(this->intel8085cpu, this->ram);
+
+    this->running = false;
+    this->COMPUTER_STATUS_CODES = 0x00000000;
 }
+
+Computer::~Computer() {}
 
 /* 
 	Entry point for system execution 
 */
-void Computer::run() {
-    this->intel8085cpu->run();
+uint32_t Computer::run() {
+    this->running = true;
+    return this->COMPUTER_STATUS_CODES = this->intel8085cpu->run(this->running);
 }
 
-void Computer::step() {
-    this->intel8085cpu->step();
+uint32_t Computer::step() {
+    return this->COMPUTER_STATUS_CODES = this->intel8085cpu->step();
+}
+
+void Computer::reset() {
+    // reset bus ??
+
+    // reset memory ??
+
+    // reset CPU
+    this->intel8085cpu->reset();
+
+    this->COMPUTER_STATUS_CODES = 0x00000000;
 }
 
 bool Computer::getSystemBusStatus() {
     return this->intel8085cpu->getSystemBusStatus();
+}
+
+uint32_t Computer::checkErrors() {
+    return this->COMPUTER_STATUS_CODES;
+}
+
+bool Computer::endProgram() {
+    return this->intel8085cpu->endProgram;
 }
 
 void Computer::loadProgram(std::array<uint8_t, PROGRAM_DIM> program, int sector) {

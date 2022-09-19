@@ -1,6 +1,6 @@
 # Computer Architecture Simulator
 
-Current Version : *0.3.0*
+Current Version : *0.4.0*
 
 # Intel 8085 Processor
 ![alt text](./images/unknown_022.png)
@@ -19,12 +19,11 @@ Current Version : *0.3.0*
 
 # Versioning
 ### Version 1.x.x Objectives
-- Emulation properly working
-
-### Version 0.4.0 Objectives
-- Running properly
+- Manual Loading of a program binary (machine code)
 
 ### Version 0.x.x Features
+- CPU stopping
+- Running properly
 - Program Loading
 - Stepping and running the CPU
 - Attaching CPU and RAM to BUS
@@ -36,6 +35,5 @@ Current Version : *0.3.0*
 - Memory unit implementation
 
 ### Future Objectives
-- CPU stopping
 - Basic OS boot
 - Assembler

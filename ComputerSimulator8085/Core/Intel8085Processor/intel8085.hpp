@@ -70,8 +70,6 @@ struct INSTRUCTION {
 class CPU
 {
 private:
-    bool endProgram = false; // HLT state
-
     uint16_t PC;   // Program Counter PC
     uint16_t SP;   // Stack Pointer SP
     uint8_t  IR;   // Instruction Register IR
@@ -93,14 +91,19 @@ private:
     std::shared_ptr<Bus> bus;  // system bus module
 
 public:
+    bool endProgram = false; // HLT state
+
     CPU();
     ~CPU();
 
     /* Execution entry point */
-    void run();
+    uint32_t run(bool& running);
 
     /* Step Execution */
-    void step();
+    uint32_t step();
+
+    /* Reset */
+    void reset();
 
     /* Cycles and procedures */
     void OFMC();  // Opcode fetch Machine Cycle

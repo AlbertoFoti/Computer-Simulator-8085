@@ -82,7 +82,15 @@ private:
      */
     void ShowSimulationControlPanel();
 
+    /**
+     * @brief Show Program Loading Panel
+     */
     void ShowProgramLoadControlPanel();
+
+    /**
+     * @brief Show Error Log Panel
+     */
+     void ShowErrorLogsPanel();
 
 	/**
 	 * @brief Central View Rendering
