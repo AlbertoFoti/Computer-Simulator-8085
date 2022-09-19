@@ -159,6 +159,10 @@ bool CPU::getSystemBusStatus() {
 	Auxiliary Functions
 */
 
+uint16_t CPU::get_PC() {
+    return this->PC;
+}
+
 void CPU::print() {
     static char hex_string[10];
 

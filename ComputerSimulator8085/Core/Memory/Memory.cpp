@@ -19,7 +19,7 @@ void Memory::load(std::array<uint8_t, MEM_DIM> memLayout) {
 /* 
 	load program into a precise memory sector
 */
-void Memory::loadProgram(std::array<uint8_t, MEM_DIM> program, int sector) {
+void Memory::loadProgram(std::array<uint8_t, PROGRAM_DIM> program, int sector) {
 	if (sector >= (MEM_DIM / PROGRAM_DIM)) {
 		std::cout << "\n\n --- Error --- __PROGRAM_INVALID_LOADING_SECTOR_LIMIT_EXCEDEED__ \n\n";
 		return;
@@ -54,27 +54,13 @@ void Memory::set(uint8_t DATA) {
 	Auxiliary Functions 
 */
 
-void Memory::print() {
+void Memory::print(uint16_t PC) {
 	static char hex_string[20];
 
-    /*
-	for (int i = 0; i < MEM_DIM; i++) {
-		sprintf(hex_string, "%.2X", this->mem[i]);
-
-		std::cout << hex_string << " ";
-		if (i % 8 == 7 ) {
-			if (i % 16 == 15) {
-				std::cout << std::endl;
-			}
-			else {
-				std::cout << " ";
-			}
-		}
-	}
-    */
-
-    for (int x = 0; x < 32; x++)
-        for (int y = 0; y < 16; y++)
+    int rows = 32;
+    int cols = 16;
+    for (int x = 0; x < rows; x++)
+        for (int y = 0; y < cols; y++)
         {
             if (y > 0)
                 ImGui::SameLine();
@@ -92,7 +78,13 @@ void Memory::print() {
 
             ImGui::PushID(x * 4 + y);
             sprintf(hex_string, "%.2X", this->mem[x*16 + y]);
-            if (ImGui::Selectable(hex_string, false, 0, ImVec2(20, 20)))
+            bool selected = false;
+            if (PC == 0) {
+                if(x == 0 && y == 0) selected = true;
+            } else {
+                selected = ((x == PC/cols) ? true : false) && ((y == PC%cols) ? true : false);
+            }
+            if (ImGui::Selectable(hex_string, selected, 0, ImVec2(20, 20)))
             {
                 
             }

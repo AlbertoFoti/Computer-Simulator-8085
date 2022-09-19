@@ -39,7 +39,7 @@
 		> max. 4 programs fit in memory simultaneously
 */
 #define MEM_DIM 512
-#define PROGRAM_DIM 128
+#define PROGRAM_DIM 256
 
 #define PADDING 20
 
@@ -61,7 +61,7 @@ public:
 	void load(std::array<uint8_t, MEM_DIM> memLayout);
 
 	/* load program into a precise memory sector */
-	void loadProgram(std::array<uint8_t, MEM_DIM> program, int sector);
+	void loadProgram(std::array<uint8_t, PROGRAM_DIM> program, int sector);
 
 	/* latch address into address buffer */
 	void latchAddress(uint16_t ADDR);
@@ -72,5 +72,5 @@ public:
 	void set(uint8_t DATA);
 
 	/* Auxiliary Functions */
-	void print();
+	void print(uint16_t PC);
 };

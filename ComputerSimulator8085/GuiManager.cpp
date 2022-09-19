@@ -140,14 +140,17 @@ void GuiManager::Update()
     }
 
     // Your GUIs go Here !
-    //this->ShowDemoWindow();
+    this->ShowDemoWindow();
     //this->ShowDemoPlot();
     //this->ShowFontTesting();
-    this->ShowMainView();
-    this->ShowSimulationControlPanel();
+    //this->ShowMainView();
+
     this->ShowMemory();
     this->ShowBus();
     this->ShowCPU();
+
+    this->ShowSimulationControlPanel();
+    this->ShowProgramLoadControlPanel();
 
     ImGui::End();
 }
@@ -228,13 +231,26 @@ void GuiManager::ShowSimulationControlPanel()
         this->computer->step();
     }
 
+    ImGui::End();
+}
+
+void GuiManager::ShowProgramLoadControlPanel() {
+    ImGui::Begin("Program Load");
+
+    static int sector = 0;
+    ImGui::SliderInt("slider int", &sector, 0, MEM_DIM / PROGRAM_DIM - 1);
+
+    if(ImGui::Button("Load")) {
+        std::array<uint8_t, PROGRAM_DIM> program;
+        this->computer->loadProgram(program, sector);
+    }
 
     ImGui::End();
 }
 
 void GuiManager::ShowMainView()
 {
-    ImGui::Begin("Program Name");
+    ImGui::Begin("Example");
 
     // Views
     ImGuiTabBarFlags tab_bar_flags = ImGuiTabBarFlags_Reorderable;
