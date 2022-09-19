@@ -1,19 +1,24 @@
 # Computer Architecture Simulator
 
-Current Version : *0.2.1*
+Current Version : *0.2.2*
 
 ### Future Objectives
-- Program Loading
+- CPU stopping
 - Basic OS boot
 
-### Version 0.4.0 Objectives
+### Version 1.1.0 Objectives
 - Assembler
 
-### Version 0.3.0 Objectives
+### Version 1.0.0 Objectives
 - Emulation properly working
+
+### Version 0.3.0 Objectives
+- Program Loading
+
+### Version 0.2.2 Features
 - Stepping and running the CPU
 
-### Version 0.2.1 Feautures
+### Version 0.2.x Feautures
 - Attaching CPU and RAM to BUS
 
 ### Version 0.1.x Features
