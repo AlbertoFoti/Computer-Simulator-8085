@@ -1,4 +1,6 @@
 #include "Bus.hpp"
+
+#include <utility>
 #include "../Intel8085Processor/intel8085.hpp"
 
 Bus::Bus() {
@@ -9,15 +11,13 @@ Bus::Bus() {
     this->ram = nullptr;
 }
 
-Bus::~Bus() {
-
-}
+Bus::~Bus() = default;
 
 /*
 	Attach Modules to bus
 */
-void Bus::attach(std::weak_ptr<CPU> cpu, std::shared_ptr<Memory> ram) {
-    if (std::shared_ptr<CPU> cpu_shared = cpu.lock()) {
+void Bus::attach(const std::weak_ptr<CPU>& cpu_, std::shared_ptr<Memory> ram_) {
+    if (std::shared_ptr<CPU> cpu_shared = cpu_.lock()) {
         std::cout << "Attaching cpu to bus" << std::endl;
         cpu_shared->attachBus(static_cast<std::shared_ptr<Bus>>(this));
     }
@@ -25,8 +25,8 @@ void Bus::attach(std::weak_ptr<CPU> cpu, std::shared_ptr<Memory> ram) {
         std::cout << "No CPU found. Object destroyed. \n";
     }
 
-    this->cpu = cpu;
-    this->ram = ram;
+    this->cpu = cpu_;
+    this->ram = std::move(ram_);
 }
 
 /*
@@ -67,7 +67,7 @@ void Bus::load(uint16_t CONTENT) {
 /*
 	Retrieve data from Data Bus (AD0-AD7)
 */
-uint8_t Bus::getData(){
+uint8_t Bus::getData() const {
     return  this->multiplexedWord;
 }
 
@@ -75,7 +75,7 @@ uint8_t Bus::getData(){
 	Auxiliary Functions
 */
 
-void Bus::print() {
+void Bus::print() const {
     static char hex_string[20];
 
     ImGui::Text("16-bits Multiplexed Bus");

@@ -1,6 +1,6 @@
 add_library(
 	Computer
-	computer.hpp computer.cpp
+		Computer.hpp Computer.cpp
 )
 
 add_subdirectory("Intel8085Processor")

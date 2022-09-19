@@ -1,4 +1,4 @@
-#include "computer.hpp"
+#include "Computer.hpp"
 
 /* 
 	Constructor 
@@ -14,7 +14,7 @@ Computer::Computer() {
     this->COMPUTER_STATUS_CODES = 0x00000000;
 }
 
-Computer::~Computer() {}
+Computer::~Computer() = default;
 
 /* 
 	Entry point for system execution 
@@ -43,12 +43,16 @@ bool Computer::getSystemBusStatus() {
     return this->intel8085cpu->getSystemBusStatus();
 }
 
-uint32_t Computer::checkErrors() {
+uint32_t Computer::checkErrors() const {
     return this->COMPUTER_STATUS_CODES;
 }
 
 bool Computer::endProgram() {
     return this->intel8085cpu->endProgram;
+}
+
+std::shared_ptr<CPU> Computer::getCPU() {
+    return this->intel8085cpu;
 }
 
 void Computer::loadProgram(std::array<uint8_t, PROGRAM_DIM> program, int sector) {

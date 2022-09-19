@@ -45,14 +45,14 @@ public:
     ~Bus();
 
     /* Attach Modules to bus */
-    void attach(std::weak_ptr<CPU> cpu, std::shared_ptr<Memory> ram);
+    void attach(const std::weak_ptr<CPU>& cpu_, std::shared_ptr<Memory> ram_);
 
     /* Put address/data in the bus */
     void load(uint16_t ADDR);
 
     /* Retrieve data from Data Bus (AD0-AD7) */
-    uint8_t getData();
+    [[nodiscard]] uint8_t getData() const;
 
     /* Auxiliary Functions */
-    void print();
+    void print() const;
 };

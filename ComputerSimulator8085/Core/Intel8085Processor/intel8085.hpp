@@ -57,36 +57,38 @@
 
 #include "../namespaceDeclaration.h"
 #include "../Bus/Bus.hpp"
+#include "Assembler/Assembler.hpp"
 #include <memory>
 #include <vector>
 
 struct INSTRUCTION {
     std::string name;
-    uint8_t(CPU::* operate)(void) = nullptr;
-    uint8_t(CPU::* addrmode)(void) = nullptr;
+    uint8_t(CPU::* operate)() = nullptr;
+
+    uint8_t(CPU::* addrmode)() = nullptr;
     uint8_t bytes = 0;
 };
 
 class CPU
 {
 private:
-    uint16_t PC;   // Program Counter PC
-    uint16_t SP;   // Stack Pointer SP
-    uint8_t  IR;   // Instruction Register IR
-    uint8_t  FR;   // Flag Register FR  (7: S, 6: Z, , 4: AC, , 2: P, , 0: CY)
+    uint16_t PC{};   // Program Counter PC
+    uint16_t SP{};   // Stack Pointer SP
+    uint8_t  IR{};   // Instruction Register IR
+    uint8_t  FR{};   // Flag Register FR  (7: S, 6: Z, , 4: AC, , 2: P, , 0: CY)
 
-    uint8_t regA;  // Register A
-    uint8_t regB;  // Register B
-    uint8_t regC;  // Register C
-    uint8_t regD;  // Register D
-    uint8_t regE;  // Register D
-    uint8_t regH;  // Register H
-    uint8_t regL;  // Register L
+    uint8_t regA{};  // Register A
+    uint8_t regB{};  // Register B
+    uint8_t regC{};  // Register C
+    uint8_t regD{};  // Register D
+    uint8_t regE{};  // Register D
+    uint8_t regH{};  // Register H
+    uint8_t regL{};  // Register L
 
-    uint8_t temp;  // Register Temp
+    uint8_t temp{};  // Register Temp
 
-    uint8_t addrDataBuffer;  // Addr/Data Buffer (tri-state interface with AD0-AD7)
-    uint8_t highAddrBuffer;  // Higher byte of address (tri-state interface with A8-A15)
+    uint8_t addrDataBuffer{};  // Addr/Data Buffer (tri-state interface with AD0-AD7)
+    uint8_t highAddrBuffer{};  // Higher byte of address (tri-state interface with A8-A15)
 
     std::shared_ptr<Bus> bus;  // system bus module
 
@@ -116,16 +118,18 @@ public:
     bool getSystemBusStatus();
 
     /* Auxiliary Functions */
-    uint16_t get_PC();
-    void print();
+    [[nodiscard]] uint16_t get_PC() const;
+    void print() const;
 
     /* Control Signals */
-    ControlSignals CTRL_SIG;
+    ControlSignals CTRL_SIG{};
 
     /* Addressing modes (NOT USED!) */
-    uint8_t IMM();    uint8_t REG();     // Immediate,  Register
-    uint8_t DIR();    uint8_t IND();     // Direct,     Indirect
-    uint8_t IMP();                       // Implied
+    [[maybe_unused]] uint8_t IMM();
+    [[maybe_unused]] uint8_t REG();     // Immediate,  Register
+    [[maybe_unused]] uint8_t DIR();
+    [[maybe_unused]] uint8_t IND();     // Direct,     Indirect
+    uint8_t IMP();                      // Implied
 
     /* Instruction opcodes =============================================== */
 
@@ -171,7 +175,5 @@ private:
     void MOVm_utility(uint8_t offset);
 
     /* Helper Functions */
-    uint16_t getMfromRegPair(uint8_t reg1, uint8_t reg2);
-    void printRegister16(uint16_t reg);
-    void printRegister8(uint8_t reg);
+    static uint16_t getMfromRegPair(uint8_t reg1, uint8_t reg2);
 };

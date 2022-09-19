@@ -1,4 +1,5 @@
 #include "GuiManager.hpp"
+#include <fstream>
 
 #define IM_CLAMP(V, MN, MX)     ((V) < (MN) ? (MN) : (V) > (MX) ? (MX) : (V))
 
@@ -101,8 +102,8 @@ void GuiManager::Update()
         {
             // Disabling fullscreen would allow the window to be moved to the front of other windows,
             // which we can't undo at the moment without finer window depth/z control.
-            ImGui::MenuItem("Fullscreen", NULL, &opt_fullscreen);
-            ImGui::MenuItem("Padding", NULL, &opt_padding);
+            ImGui::MenuItem("Fullscreen", nullptr, &opt_fullscreen);
+            ImGui::MenuItem("Padding", nullptr, &opt_padding);
             ImGui::Separator();
 
             if (ImGui::MenuItem("Flag: NoSplit", "", (dockspace_flags & ImGuiDockNodeFlags_NoSplit) != 0)) { dockspace_flags ^= ImGuiDockNodeFlags_NoSplit; }
@@ -116,7 +117,7 @@ void GuiManager::Update()
 
         if (ImGui::BeginMenu("Config"))
         {
-            ImGui::MenuItem("##CONFIG", NULL);
+            ImGui::MenuItem("##CONFIG", nullptr);
             ImGui::ShowFontSelector("Font");
             this->ShowStyleSelectorGUI("ImGui Style");
             this->ShowStyleSelectorPLOT("ImPlot Style");
@@ -131,7 +132,7 @@ void GuiManager::Update()
 
         if (ImGui::BeginMenu("About"))
         {
-            ImGui::MenuItem("\xA9 2022 Alberto Foti. All rights reserved", NULL);
+            ImGui::MenuItem("\xA9 2022 Alberto Foti. All rights reserved", nullptr);
             ImGui::Separator();
             ImGui::EndMenu();
         }
@@ -150,7 +151,7 @@ void GuiManager::Update()
     this->ShowCPU();
 
     this->ShowSimulationControlPanel();
-    this->ShowProgramLoadControlPanel();
+    this->ShowProgramEditorPanel();
     this->ShowErrorLogsPanel();
 
     ImGui::End();
@@ -209,7 +210,7 @@ void GuiManager::ShowCPU() {
     bool endProgram = this->computer->endProgram();
     if(endProgram) sprintf(str, "TRUE");
     else sprintf(str, "FALSE");
-    ImGui::Text(str);
+    ImGui::Text("%s", str);
 
     ImGui::End();
 }
@@ -273,11 +274,12 @@ uint8_t hexCharToUint8(char c) {
         case 'D': return 0x0D;
         case 'E': return 0x0E;
         case 'F': return 0x0F;
-        return 0x00;
+        default:
+            return 0x00;
     }
 }
 
-void GuiManager::ShowProgramLoadControlPanel() {
+void GuiManager::ShowProgramEditorPanel() {
     ImGui::Begin("Program Load");
 
     static int sector = 0;
@@ -286,20 +288,47 @@ void GuiManager::ShowProgramLoadControlPanel() {
     static char buf3[PROGRAM_DIM] = {};
     ImGui::InputText("hexadecimal", buf3, PROGRAM_DIM, ImGuiInputTextFlags_CharsHexadecimal | ImGuiInputTextFlags_CharsUppercase);
 
-    if(ImGui::Button("Load")) {
+    if(ImGui::Button("Manual Load")) {
         std::array<uint8_t, PROGRAM_DIM> program = {0};
         for (int i=0; i< strlen(buf3); i+=2) {
             uint8_t u = hexCharToUint8(buf3[i]);
             uint8_t l = hexCharToUint8(buf3[i+1]);
             program[i/2] = (u << 4) | l;
         }
-        /*
-        label 0x0000:
-        3A 40 00 47 3A 41 00 80
-        32 42 00
-        data 0x0040:
-        05 07
-         */
+        this->computer->loadProgram(program, sector);
+    }
+
+    static char text[1024 * 16] =
+            "label 0x0000:\n"
+            "\tlda 0x0040\n"
+            "\tmov B, A\n"
+            "\tlda 0x0041\n"
+            "\tadd B\n"
+            "\tsta 0x0042\n"
+            "\n"
+            "data 0x0040:\n"
+            "\t05 07\n";
+
+    ImGui::InputTextMultiline("##source", text, IM_ARRAYSIZE(text), ImVec2(-FLT_MIN, ImGui::GetTextLineHeight() * 16), ImGuiInputTextFlags_AllowTabInput);
+
+    if(ImGui::Button("Save and Load")) {
+        std::string temp_outfile = "prog.txt";
+        std::string out_file = "out.txt";
+
+        // Save to File prog.txt
+        std::ofstream fpW;
+        fpW.open(temp_outfile);
+        fpW << text;
+        fpW.close();
+
+        // Assembler to generate output code [ source.txt -> out.txt ]
+        std::shared_ptr<Assembler> assembler = std::make_shared<Assembler>(this->computer->getCPU());
+        assembler->formatProgram(temp_outfile, "out.txt");
+
+        // Program code layout construction
+        auto program = assembler->getProgram();
+
+        // MEMORY Program Load
         this->computer->loadProgram(program, sector);
     }
 
@@ -313,7 +342,7 @@ void GuiManager::ShowErrorLogsPanel() {
     static char code[50];
     sprintf(code, "%08X", status);
     ImGui::Text("COMPUTER STATUS CODE: "); ImGui::SameLine();
-    ImGui::Text(code);
+    ImGui::Text("%s", code);
 
     if(status == 0x00000000) {
         ImGui::Text("Program Operating Successfully. [POSITIVE]");
