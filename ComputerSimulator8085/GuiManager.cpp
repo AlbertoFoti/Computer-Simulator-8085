@@ -143,11 +143,15 @@ void GuiManager::Update()
     //this->ShowDemoWindow();
     //this->ShowDemoPlot();
     //this->ShowFontTesting();
+
     this->ShowMainView();
-    this->ShowSimulationControlPanel();
+
     this->ShowMemory();
     this->ShowBus();
     this->ShowCPU();
+
+    this->ShowSimulationControlPanel();
+    this->ShowProgramLoadControlPanel();
 
     ImGui::End();
 }
@@ -228,6 +232,17 @@ void GuiManager::ShowSimulationControlPanel()
         this->computer->step();
     }
 
+    ImGui::End();
+}
+
+void GuiManager::ShowProgramLoadControlPanel() {
+    ImGui::Begin("Program Load");
+
+    if(ImGui::Button("Load")) {
+        std::cout << "Loading..." << std::endl;
+        std::array<uint8_t, 512> program;
+        this->computer->loadProgram(program, 0);
+    }
 
     ImGui::End();
 }

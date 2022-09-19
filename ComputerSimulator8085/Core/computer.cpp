@@ -26,6 +26,10 @@ bool Computer::getSystemBusStatus() {
     this->intel8085cpu->getSystemBusStatus();
 }
 
+void Computer::loadProgram(std::array<uint8_t, MEM_DIM> program, int sector) {
+    this->ram->loadProgram(program, sector);
+}
+
 void Computer::printCPU() {
     this->intel8085cpu->print();
 }

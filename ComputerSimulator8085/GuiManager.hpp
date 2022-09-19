@@ -82,6 +82,8 @@ private:
      */
     void ShowSimulationControlPanel();
 
+    void ShowProgramLoadControlPanel();
+
 	/**
 	 * @brief Central View Rendering
 	 * 
