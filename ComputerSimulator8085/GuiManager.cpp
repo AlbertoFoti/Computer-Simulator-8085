@@ -194,9 +194,19 @@ void GuiManager::ShowBus() {
 void GuiManager::ShowCPU() {
     ImGui::Begin("Intel8085");
 
-    this->computer->run();
+    this->computer->printCPU();
+    ImGui::Separator();
+    this->ShowSystemBusStatus();
 
     ImGui::End();
+}
+
+void GuiManager::ShowSystemBusStatus() {
+    if( this->computer->getSystemBusStatus() ) {
+        ImGui::Text("CPU correctly connected to System Bus.");
+    } else {
+        ImGui::Text("CPU not connected to Bus yet.");
+    }
 }
 
 void GuiManager::ShowMainView()

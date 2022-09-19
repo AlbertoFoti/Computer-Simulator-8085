@@ -87,8 +87,8 @@ private:
 
     uint8_t temp;  // Register Temp
 
-    uint8_t AddrDataBuffer;  // Addr/Data Buffer (tri-state interface with AD0-AD7)
-    uint8_t HighAddrBuffer;  // Higher byte of address (tri-state interface with A8-A15)
+    uint8_t addrDataBuffer;  // Addr/Data Buffer (tri-state interface with AD0-AD7)
+    uint8_t highAddrBuffer;  // Higher byte of address (tri-state interface with A8-A15)
 
     std::shared_ptr<Bus> bus;  // system bus module
 
@@ -110,6 +110,7 @@ public:
 
     /* Link to system bus */
     void attachBus(std::shared_ptr<Bus>);
+    bool getSystemBusStatus();
 
     /* Auxiliary Functions */
     void print();

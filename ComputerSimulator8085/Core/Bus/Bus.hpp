@@ -27,17 +27,17 @@
 #include <memory>
 #include "../namespaceDeclaration.h"
 #include "../Memory/Memory.hpp"
-//#include "CPU.h"
 
 class Bus
 {
 private:
     /* AD0 - AD7 */
     uint8_t multiplexedWord;
+
     /* A8  - A15 */
     uint8_t addressBusHigh;
 
-    //CPU* cpu;
+    std::weak_ptr<CPU> cpu;
     std::shared_ptr<Memory> ram;
 
 public:
@@ -45,9 +45,11 @@ public:
     ~Bus();
 
     /* Attach Modules to bus */
-    //void attach(CPU* cpu, Memory* ram);
+    void attach(std::weak_ptr<CPU> cpu, std::shared_ptr<Memory> ram);
+
     /* Put address/data in the bus */
     void load(uint16_t ADDR);
+
     /* Retrieve data from Data Bus (AD0-AD7) */
     uint8_t getData();
 

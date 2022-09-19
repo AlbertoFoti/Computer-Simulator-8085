@@ -25,6 +25,11 @@ public:
     /* step execution */
     void step();
 
+    /* Status */
+    bool getSystemBusStatus();
+
+    /* Print functions */
+    void printCPU();
     void printMemory();
     void printBus();
 };

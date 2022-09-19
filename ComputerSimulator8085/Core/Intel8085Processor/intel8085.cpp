@@ -16,8 +16,8 @@ CPU::CPU() {
     this->regL = 0x00;
 
     /* Buffers cleared */
-    this->AddrDataBuffer = 0x00;
-    this->HighAddrBuffer = 0x00;
+    this->addrDataBuffer = 0x00;
+    this->highAddrBuffer = 0x00;
 
     this->CTRL_SIG.iom = 0;
     this->CTRL_SIG.S0 = 0;
@@ -58,6 +58,9 @@ CPU::~CPU() {}
 void CPU::run() {
     if( this->bus == nullptr ) {
         ImGui::Text("CPU not connected to Bus yet.");
+        return;
+    } else {
+        ImGui::Text("CPU correctly connected to System Bus.");
         return;
     }
 
@@ -100,7 +103,7 @@ void CPU::OFMC() {
     // data <- Memory[PC]
     MRMC(this->PC, true);
     // data -> IR
-    this->IR = this->AddrDataBuffer;
+    this->IR = this->addrDataBuffer;
 }
 
 /* Execute */
@@ -128,7 +131,7 @@ void CPU::MRMC(uint16_t ADDR, bool isFromPC){
     //this->CTRL_SIG.RDbar = 0;
     uint8_t data = this->bus->getData();
     // data -> DataBuffer
-    this->AddrDataBuffer = data;
+    this->addrDataBuffer = data;
     //this->CTRL_SIG.RDbar = 1;
 
     if (isFromPC)
@@ -155,11 +158,87 @@ void CPU::attachBus(std::shared_ptr<Bus> bus) {
     this->bus = bus;
 }
 
+bool CPU::getSystemBusStatus() {
+    if( this->bus == nullptr ) {
+        return false;
+    } else {
+        return true;
+    }
+}
+
 /*
 	Auxiliary Functions
 */
 
 void CPU::print() {
+    static char hex_string[10];
+
+    ImGui::Text("PC :"); ImGui::SameLine();
+    sprintf(hex_string, "0x%02X", this->PC);
+    ImGui::Text(hex_string);
+
+    ImGui::Text("SP :"); ImGui::SameLine();
+    sprintf(hex_string, "0x%02X", this->SP);
+    ImGui::Text(hex_string);
+
+    ImGui::Text("IR :"); ImGui::SameLine();
+    sprintf(hex_string, "0x%02X", this->IR);
+    ImGui::Text(hex_string);
+
+    ImGui::Text("FR :"); ImGui::SameLine();
+    sprintf(hex_string, "0x%02X", this->FR);
+    ImGui::Text(hex_string);
+
+    ImGui::Text("FR :"); ImGui::SameLine();
+    sprintf(hex_string, "0x%02X", this->FR);
+    ImGui::Text(hex_string);
+
+    ImGui::Separator();
+    ImGui::Text("Registers");
+
+    ImGui::Text("RA :"); ImGui::SameLine();
+    sprintf(hex_string, "0x%02X", this->regA);
+    ImGui::Text(hex_string);
+
+    ImGui::Text("RB :"); ImGui::SameLine();
+    sprintf(hex_string, "0x%02X", this->regB);
+    ImGui::Text(hex_string);
+
+    ImGui::Text("RC :"); ImGui::SameLine();
+    sprintf(hex_string, "0x%02X", this->regC);
+    ImGui::Text(hex_string);
+
+    ImGui::Text("RD :"); ImGui::SameLine();
+    sprintf(hex_string, "0x%02X", this->regD);
+    ImGui::Text(hex_string);
+
+    ImGui::Text("RE :"); ImGui::SameLine();
+    sprintf(hex_string, "0x%02X", this->regE);
+    ImGui::Text(hex_string);
+
+    ImGui::Text("RH :"); ImGui::SameLine();
+    sprintf(hex_string, "0x%02X", this->regH);
+    ImGui::Text(hex_string);
+
+    ImGui::Text("RL :"); ImGui::SameLine();
+    sprintf(hex_string, "0x%02X", this->regL);
+    ImGui::Text(hex_string);
+
+    ImGui::Text("TMP:"); ImGui::SameLine();
+    sprintf(hex_string, "0x%02X", this->temp);
+    ImGui::Text(hex_string);
+
+    ImGui::Separator();
+
+    ImGui::Text("AD0-AD7 :"); ImGui::SameLine();
+    sprintf(hex_string, "0x%02X", this->addrDataBuffer);
+    ImGui::Text(hex_string);
+
+    ImGui::Text("A7-A15  :"); ImGui::SameLine();
+    sprintf(hex_string, "0x%02X", this->highAddrBuffer);
+    ImGui::Text(hex_string);
+
+    /*
     std::cout << "---- 8085 uProcessor --------------------\n";
     std::cout << ">  PC: 0x";
     this->printRegister16(this->PC);
@@ -191,7 +270,7 @@ void CPU::print() {
     this->printRegister8(this->AddrDataBuffer);
     std::cout << ">  A7-A15 :  0x";
     this->printRegister8(this->HighAddrBuffer);
-
+    */
 }
 
 
@@ -250,7 +329,7 @@ uint8_t CPU::MVI() {
     MRMC(PC, true);
 
     // data
-    uint8_t data = this->AddrDataBuffer;
+    uint8_t data = this->addrDataBuffer;
 
     switch (IR) {
         case 0x3E: // mvi A, data
@@ -286,10 +365,10 @@ uint8_t CPU::MVI() {
 uint8_t CPU::LXI() {
     // MRMC : Read cycle 1
     MRMC(PC, true);
-    uint8_t dataL = this->AddrDataBuffer;
+    uint8_t dataL = this->addrDataBuffer;
     // MRMC : Read cycle 2
     MRMC(PC, true);
-    uint8_t dataH = this->AddrDataBuffer;
+    uint8_t dataH = this->addrDataBuffer;
 
     switch (IR) {
         case 0x01: // lxi B, 0x0000
@@ -312,15 +391,15 @@ uint8_t CPU::LXI() {
 uint8_t CPU::LDA() {
     // MRMC : Read cycle 1
     MRMC(PC, true);
-    uint8_t addressL = this->AddrDataBuffer;
+    uint8_t addressL = this->addrDataBuffer;
     // MRMC : Read cycle 2
     MRMC(PC, true);
-    uint8_t addressH = this->AddrDataBuffer;
+    uint8_t addressH = this->addrDataBuffer;
 
     uint16_t ADDR = (((uint16_t)addressH) << 8) + ((uint16_t)addressL);
 
     MRMC(ADDR, false);
-    regA = this->AddrDataBuffer;
+    regA = this->addrDataBuffer;
 
     return 0;
 }
@@ -328,10 +407,10 @@ uint8_t CPU::LDA() {
 uint8_t CPU::STA() {
     // MRMC : Read cycle 1
     MRMC(PC, true);
-    uint8_t addressL = this->AddrDataBuffer;
+    uint8_t addressL = this->addrDataBuffer;
     // MRMC : Read cycle 2
     MRMC(PC, true);
-    uint8_t addressH = this->AddrDataBuffer;
+    uint8_t addressH = this->addrDataBuffer;
 
     uint16_t ADDR = (((uint16_t)addressH) << 8) + ((uint16_t)addressL);
 
@@ -343,17 +422,17 @@ uint8_t CPU::STA() {
 uint8_t CPU::LHLD() {
     // MRMC : Read cycle 1
     MRMC(PC, true);
-    uint8_t addressL = this->AddrDataBuffer;
+    uint8_t addressL = this->addrDataBuffer;
     // MRMC : Read cycle 2
     MRMC(PC, true);
-    uint8_t addressH = this->AddrDataBuffer;
+    uint8_t addressH = this->addrDataBuffer;
 
     uint16_t ADDR = (((uint16_t)addressH) << 8) + ((uint16_t)addressL);
 
     MRMC(ADDR, false);
-    regL = this->AddrDataBuffer;
+    regL = this->addrDataBuffer;
     MRMC(++ADDR, false);
-    regH = this->AddrDataBuffer;
+    regH = this->addrDataBuffer;
 
     return 0;
 }
@@ -361,10 +440,10 @@ uint8_t CPU::LHLD() {
 uint8_t CPU::SHLD() {
     // MRMC : Read cycle 1
     MRMC(PC, true);
-    uint8_t addressL = this->AddrDataBuffer;
+    uint8_t addressL = this->addrDataBuffer;
     // MRMC : Read cycle 2
     MRMC(PC, true);
-    uint8_t addressH = this->AddrDataBuffer;
+    uint8_t addressH = this->addrDataBuffer;
 
     uint16_t ADDR = (((uint16_t)addressH) << 8) + ((uint16_t)addressL);
 
@@ -386,7 +465,7 @@ uint8_t CPU::LDAX() {
     }
 
     MRMC(ADDR, false);
-    regA = this->AddrDataBuffer;
+    regA = this->addrDataBuffer;
 
     return 0;
 }
@@ -439,7 +518,7 @@ uint8_t CPU::ADD() {
             break;
         case 0x86:   // ADD m
             MRMC(getMfromRegPair(regH, regL), false);
-            temp = this->AddrDataBuffer;
+            temp = this->addrDataBuffer;
             break;
         case 0x87:   // ADD A
             temp = regA;
@@ -466,7 +545,7 @@ uint8_t CPU::ADD() {
 
 uint8_t CPU::ADI() {
     MRMC(PC, true);
-    temp = this->AddrDataBuffer;
+    temp = this->addrDataBuffer;
 
     regA = regA + temp;
 
@@ -499,7 +578,7 @@ uint8_t CPU::ADC() {
             break;
         case 0x8E:   // ADC m
             MRMC(getMfromRegPair(regH, regL), false);
-            temp = this->AddrDataBuffer;
+            temp = this->addrDataBuffer;
             break;
         case 0x8F:   // ADC A
             temp = regA;
@@ -517,7 +596,7 @@ uint8_t CPU::ADC() {
 
 uint8_t CPU::ACI() {
     MRMC(PC, true);
-    temp = this->AddrDataBuffer;
+    temp = this->addrDataBuffer;
 
     regA = regA + temp + (FR & 0x01);
 
@@ -550,7 +629,7 @@ uint8_t CPU::SUB() {
             break;
         case 0x96:   // SUB m
             MRMC(getMfromRegPair(regH, regL), false);
-            temp = this->AddrDataBuffer;
+            temp = this->addrDataBuffer;
             break;
         case 0x97:   // SUB A
             temp = regA;
@@ -568,7 +647,7 @@ uint8_t CPU::SUB() {
 
 uint8_t CPU::SUI() {
     MRMC(PC, true);
-    temp = this->AddrDataBuffer;
+    temp = this->addrDataBuffer;
 
     regA = regA - temp;
 
@@ -601,7 +680,7 @@ uint8_t CPU::SBB() {
             break;
         case 0x9E:   // SBB m
             MRMC(getMfromRegPair(regH, regL), false);
-            temp = this->AddrDataBuffer;
+            temp = this->addrDataBuffer;
             break;
         case 0x9F:   // SBB A
             temp = regA;
@@ -619,7 +698,7 @@ uint8_t CPU::SBB() {
 
 uint8_t CPU::SBI() {
     MRMC(PC, true);
-    temp = this->AddrDataBuffer;
+    temp = this->addrDataBuffer;
 
     regA = regA - temp - (FR & 0x01);
 
@@ -655,7 +734,7 @@ uint8_t CPU::INR() {
             break;
         case 0x34:   // INR m
             MRMC(getMfromRegPair(regH, regL), false);
-            temp = this->AddrDataBuffer;
+            temp = this->addrDataBuffer;
             MWMC(getMfromRegPair(regH, regL), temp + 1);
             break;
     }
@@ -698,7 +777,7 @@ uint8_t CPU::DCR() {
             break;
         case 0x35:   // DCR m
             MRMC(getMfromRegPair(regH, regL), false);
-            temp = this->AddrDataBuffer;
+            temp = this->addrDataBuffer;
             buf = temp - 1;
             MWMC(getMfromRegPair(regH, regL), temp - 1);
             break;
@@ -790,7 +869,7 @@ uint8_t CPU::ANA() {
             break;
         case 0xA6:   // ANA m
             MRMC(getMfromRegPair(regH, regL), false);
-            temp = this->AddrDataBuffer;
+            temp = this->addrDataBuffer;
             regA = temp & regA;
             break;
     }
@@ -824,7 +903,7 @@ uint8_t CPU::ORA() {
             break;
         case 0xB6:   // ORA m
             MRMC(getMfromRegPair(regH, regL), false);
-            temp = this->AddrDataBuffer;
+            temp = this->addrDataBuffer;
             regA = temp | regA;
             break;
     }
@@ -858,7 +937,7 @@ uint8_t CPU::XRA() {
             break;
         case 0xAE:   // XRA m
             MRMC(getMfromRegPair(regH, regL), false);
-            temp = this->AddrDataBuffer;
+            temp = this->addrDataBuffer;
             regA = temp ^ regA;
             break;
     }
@@ -892,7 +971,7 @@ uint8_t CPU::CMP() {
             break;
         case 0xBE:   // CMP m
             MRMC(getMfromRegPair(regH, regL), false);
-            temp = this->AddrDataBuffer;
+            temp = this->addrDataBuffer;
             break;
     }
 
@@ -955,10 +1034,10 @@ uint8_t CPU::JMP() {
 uint8_t CPU::JNZ() {
     // MRMC : Read cycle 1
     MRMC(PC, true);
-    uint8_t addressL = this->AddrDataBuffer;
+    uint8_t addressL = this->addrDataBuffer;
     // MRMC : Read cycle 2
     MRMC(PC, true);
-    uint8_t addressH = this->AddrDataBuffer;
+    uint8_t addressH = this->addrDataBuffer;
 
     uint16_t ADDR = (((uint16_t)addressH) << 8) + ((uint16_t)addressL);
 
@@ -985,10 +1064,10 @@ uint8_t CPU::JZ() {
 uint8_t CPU::JNC() {
     // MRMC : Read cycle 1
     MRMC(PC, true);
-    uint8_t addressL = this->AddrDataBuffer;
+    uint8_t addressL = this->addrDataBuffer;
     // MRMC : Read cycle 2
     MRMC(PC, true);
-    uint8_t addressH = this->AddrDataBuffer;
+    uint8_t addressH = this->addrDataBuffer;
 
     uint16_t ADDR = (((uint16_t)addressH) << 8) + ((uint16_t)addressL);
 
@@ -1176,7 +1255,7 @@ void CPU::MOV_utility(uint8_t& reg, uint8_t offset) {
             break;
         case 0x06: // mov X, m
             MRMC(getMfromRegPair(regH, regL), false);
-            reg = this->AddrDataBuffer;
+            reg = this->addrDataBuffer;
             break;
         case 0x07: // mov X, A
             reg = regA;
