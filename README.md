@@ -1,6 +1,6 @@
 # Computer Architecture Simulator
 
-Current Stable Version : **Version 1.0.0**
+Current Stable Version : **Version 2.0.0**
 
 ## License and Copyright
 � 2022 Alberto Foti. All Rights Reserved.
@@ -8,6 +8,8 @@ Current Stable Version : **Version 1.0.0**
 ## For Final Users
 There isn't a proper installation procedure yet. (The product is still in development)
 
+## Preview
+![alt text](./images/unknown_025.png)
 
 # Intel 8085 Processor
 ![alt text](./images/unknown_022.png)
@@ -17,9 +19,8 @@ There isn't a proper installation procedure yet. (The product is still in develo
 ![alt text](./images/unknown_023.png)
 ### Main Memory (RAM)
 ![alt text](./images/unknown_024.png)
-
-# Intel 8085 Assembler
-- Future versions...
+### Intel 8085 Assembler
+![alt text](./images/unknown_026.png)
 
 # Basic Operating System (OS) running
 - Future versions...
@@ -27,13 +28,14 @@ There isn't a proper installation procedure yet. (The product is still in develo
 
 
 # Versioning
-### Version 1.x.x Objectives
-- Example Programs
+### Versions 2.x.x Objectives
+- work in progress...
 
-### Version 1.1.0 Objectives
+### Versions 1.x.x Features
+- Example Programs
 - Basic Assembler implementation
 
-### Version 0.x.x Features
+### Versions 0.x.x Features
 - Manual Loading of a program binary (machine code)
 - CPU stopping
 - Running properly
