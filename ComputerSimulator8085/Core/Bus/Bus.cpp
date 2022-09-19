@@ -83,16 +83,16 @@ void Bus::print() {
     ImGui::Text("( Address[8-F], Multiplexed Address/Data [0-7] )");
 
     ImGui::PushID(1);
-    sprintf(hex_string, "%.2X", this->addressBusHigh);
-    if (ImGui::Selectable(hex_string, false, 0, ImVec2(20, 20)))
+    sprintf(hex_string, "0x%02X", this->addressBusHigh);
+    if (ImGui::Selectable(hex_string, false, 0, ImVec2(30, 20)))
     {
 
     }
     ImGui::PopID(); ImGui::SameLine();
 
     ImGui::PushID(2);
-    sprintf(hex_string, "%.2X", this->multiplexedWord);
-    if (ImGui::Selectable(hex_string, false, 0, ImVec2(20, 20)))
+    sprintf(hex_string, "0x%02X", this->multiplexedWord);
+    if (ImGui::Selectable(hex_string, false, 0, ImVec2(30, 20)))
     {
 
     }
