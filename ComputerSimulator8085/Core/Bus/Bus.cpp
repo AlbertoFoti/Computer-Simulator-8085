@@ -5,7 +5,7 @@ Bus::Bus() {
     this->multiplexedWord = 0x00;
     this->addressBusHigh = 0x00;
 
-    //this->cpu = nullptr;
+    this->cpu = std::weak_ptr<CPU>();
     this->ram = nullptr;
 }
 
@@ -74,10 +74,6 @@ uint8_t Bus::getData(){
 /*
 	Auxiliary Functions
 */
-
-void Bus::printMemory() {
-    this->ram->print();
-}
 
 void Bus::print() {
     static char hex_string[20];

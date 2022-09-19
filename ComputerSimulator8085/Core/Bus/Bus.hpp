@@ -54,6 +54,5 @@ public:
     uint8_t getData();
 
     /* Auxiliary Functions */
-    void printMemory();
     void print();
 };
