@@ -21,10 +21,11 @@ Current Version : *0.3.0*
 ### Version 1.x.x Objectives
 - Emulation properly working
 
-### Version 0.3.0 Features
-- Program Loading
+### Version 0.4.0 Objectives
+- Running properly
 
 ### Version 0.x.x Features
+- Program Loading
 - Stepping and running the CPU
 - Attaching CPU and RAM to BUS
 - Project cleanup and better setup
