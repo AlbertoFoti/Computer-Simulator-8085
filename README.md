@@ -2,14 +2,22 @@
 
 Current Version : *0.2.2*
 
-### Future Objectives
-- CPU stopping
-- Basic OS boot
+# Intel 8085 Processor
+![alt text](./images/unknown_022.png)
 
-### Version 1.1.0 Objectives
-- Assembler
+# Computer Architecture
+### System Bus
+![alt text](./images/unknown_023.png)
+### Main Memory (RAM)
+![alt text](./images/unknown_024.png)
 
-### Version 1.0.0 Objectives
+# Intel 8085 Assembler
+- Future versions...
+
+# Basic Operating System (OS) running
+- Future versions...
+
+### Version 1.x.x Objectives
 - Emulation properly working
 
 ### Version 0.3.0 Objectives
@@ -18,27 +26,16 @@ Current Version : *0.2.2*
 ### Version 0.2.2 Features
 - Stepping and running the CPU
 
-### Version 0.2.x Feautures
+### Version 0.x.x Features
 - Attaching CPU and RAM to BUS
-
-### Version 0.1.x Features
 - Project cleanup and better setup
 - 8085 Processor basic implementation
 - Bus system implementation
-
-### Version 0.0.x Features
 - Basic GUI (empty)
 - Project modular structure setup
 - Memory unit implementation
 
-# Intel 8085 Processor
-- Work in progress...
-
-# Computer Architecture
-- Work in progress...
-
-# Intel 8085 Assembler
-- Future versions...
-
-# Basic Operating System (OS) running
-- Future versions...
+### Future Objectives
+- CPU stopping
+- Basic OS boot
+- Assembler
