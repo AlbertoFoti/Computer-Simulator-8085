@@ -143,8 +143,7 @@ void GuiManager::Update()
     //this->ShowDemoWindow();
     //this->ShowDemoPlot();
     //this->ShowFontTesting();
-
-    this->ShowMainView();
+    //this->ShowMainView();
 
     this->ShowMemory();
     this->ShowBus();
@@ -239,9 +238,8 @@ void GuiManager::ShowProgramLoadControlPanel() {
     ImGui::Begin("Program Load");
 
     if(ImGui::Button("Load")) {
-        std::cout << "Loading..." << std::endl;
-        std::array<uint8_t, 512> program;
-        this->computer->loadProgram(program, 0);
+        std::array<uint8_t, PROGRAM_DIM> program;
+        this->computer->loadProgram(program, 1);
     }
 
     ImGui::End();
@@ -249,7 +247,7 @@ void GuiManager::ShowProgramLoadControlPanel() {
 
 void GuiManager::ShowMainView()
 {
-    ImGui::Begin("Program Name");
+    ImGui::Begin("Example");
 
     // Views
     ImGuiTabBarFlags tab_bar_flags = ImGuiTabBarFlags_Reorderable;

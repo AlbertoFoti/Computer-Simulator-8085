@@ -19,7 +19,7 @@ void Memory::load(std::array<uint8_t, MEM_DIM> memLayout) {
 /* 
 	load program into a precise memory sector
 */
-void Memory::loadProgram(std::array<uint8_t, MEM_DIM> program, int sector) {
+void Memory::loadProgram(std::array<uint8_t, PROGRAM_DIM> program, int sector) {
 	if (sector >= (MEM_DIM / PROGRAM_DIM)) {
 		std::cout << "\n\n --- Error --- __PROGRAM_INVALID_LOADING_SECTOR_LIMIT_EXCEDEED__ \n\n";
 		return;

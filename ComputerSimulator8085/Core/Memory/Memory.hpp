@@ -61,7 +61,7 @@ public:
 	void load(std::array<uint8_t, MEM_DIM> memLayout);
 
 	/* load program into a precise memory sector */
-	void loadProgram(std::array<uint8_t, MEM_DIM> program, int sector);
+	void loadProgram(std::array<uint8_t, PROGRAM_DIM> program, int sector);
 
 	/* latch address into address buffer */
 	void latchAddress(uint16_t ADDR);

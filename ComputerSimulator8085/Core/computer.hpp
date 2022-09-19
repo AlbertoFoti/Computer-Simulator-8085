@@ -29,7 +29,7 @@ public:
     bool getSystemBusStatus();
 
     /* Memory Interfacing */
-    void loadProgram(std::array<uint8_t, MEM_DIM> program, int sector);
+    void loadProgram(std::array<uint8_t, PROGRAM_DIM> program, int sector);
 
     /* Print functions */
     void printCPU();
