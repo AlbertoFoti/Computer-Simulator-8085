@@ -1,135 +1,150 @@
 #include "Assembler.hpp"
 
+#include <utility>
+
 /*
 	Constructor
 */
 Assembler::Assembler(std::shared_ptr<CPU> cpu) {
     // __init__
-    this->uProcessor = cpu;
+    this->uProcessor = std::move(cpu);
 }
 
-Assembler::~Assembler() {}
+Assembler::~Assembler() = default;
 
 /*
 	from a source code to a formatted binary
 */
-void Assembler::formatProgram(std::string filePath, std::string outputPath) {
-    // file Read
-    std::ifstream fpR;
-    // file Output/Write
-    std::ofstream fpW;
-
+void Assembler::formatProgram(const std::string& filePath, const std::string& outputPath) {
     /*
         Formatting Operation 1 : labels and routines  ================================================================================
     */
+    auto routines = retrieveRoutinesAndParse(filePath);
+
+    /*
+        Formatting Operation 2 : temp.txt -> tmp.txt ============================================================================
+    */
+    programParsingSecondOperation(routines);
+
+    /*
+        Formatting Operations III ==========================================================================================
+    */
+    programParsingAndOutputGeneration();
+}
+
+std::vector<Routine> Assembler::retrieveRoutinesAndParse(const std::string &filePath) {
+    std::ifstream fpR;
+    std::ofstream fpW;
+    std::vector<Routine> routines;
+
     fpR.open(filePath);
     fpW.open("temp.txt");
 
-    // Routine Vector
-    std::vector<routine> routines{};
+    if(!fpR.is_open()) {
+        fpR.close();
+        fpW.close();
+        return routines;
+    }
 
-    if (fpR.is_open()) {
-        bool firstline = true;
-        bool dataSection = false;
+    bool first_line = true;
+    bool dataSection = false;
+    int bytesAllocated = 0;
+    std::string line;
+    std::vector<std::string> params{};
 
-        // bytes allocated
-        int bytesAllocated = 0;
+    /*
+        for each <line>:
+            > label line  : write without modify
+            > routine line: save routine in vector <routines> if new  (name, baseAddress)
+            > data line   : write without modify
+            > simple line :   - search for instruction length in lookup table of the CPU and add to the bytesAllocated variable
+                              -if there is a routine involved save it in vector <routines>
+    */
+    while (getline(fpR, line)) {
+        // --- label 0x0000 ---
+        std::size_t labelLine = line.find("label");
+        // --- data: ---
+        std::size_t dataLine = line.find("data");
+        // --- _func: ---
+        bool routineLine = (line[0] == '_');
 
-        std::string line;
-        std::vector<std::string> params{};
-
-        /*
-            for each <line>:
-                > label line  : write without modify
-                > routine line: save routine in vector <routines> if new  (name, baseAddress)
-                > data line   : write without modify
-                > simple line :   - search for instruction length in lookup table of the CPU and add to the bytesAllocated variable
-                                  -if there is a routine involved save it in vector <routines>
-        */
-        while (getline(fpR, line)) {
-            // --- label 0x0000 ---
-            std::size_t labelLine = line.find("label");
-            // --- data: ---
-            std::size_t dataLine = line.find("data");
-            // --- _func: ---
-            bool routineLine = (line[0] == '_') ? true : false;
-
-            if (labelLine != std::string::npos) {
-                if (firstline == false) fpW << std::endl;
-                fpW << line << std::endl;
-                firstline = false;
-                dataSection = false;
+        if (labelLine != std::string::npos) {
+            if (!first_line) fpW << std::endl;
+            fpW << line << std::endl;
+            first_line = false;
+            dataSection = false;
+        } else if (routineLine == 1) {
+            auto offset = (uint16_t)(bytesAllocated);
+            std::string str = splitString(line, " ")[0];
+            std::string name = str.substr(0, str.length()-1);
+            if (setRoutineParams(routines, name, offset) == -1) {
+                Routine x;
+                x.name = name;
+                routines.push_back(x);
+                setRoutineParams(routines, name, offset);
             }
-            else if (routineLine == 1) {
-                uint16_t offset = (uint16_t)(bytesAllocated);
-                std::string str = splitString(line, " ")[0];
-                std::string name = str.substr(0, str.length()-1);
-                if (setRoutineParams(routines, name, offset) == -1) {
-                    routine x;
-                    x.name = name;
-                    routines.push_back(x);
-                    setRoutineParams(routines, name, offset);
-                }
-                fpW << "label 0x" << register16(offset) << std::endl;
-                dataSection = false;
-            }
-            else if (dataLine != std::string::npos) {
-                if (firstline == false) fpW << std::endl;
-                fpW << line << std::endl;
-                firstline = false;
-                dataSection = true;
-            }
-            else if (line.length() == 0) {
-                // Do Nothing
-            }
-            else {
-                line.erase(0, 1);  // tab removed
-                params = splitString(line, " ");
+            fpW << "label 0x" << register16(offset) << std::endl;
+            dataSection = false;
+        } else if (dataLine != std::string::npos) {
+            if (!first_line) fpW << std::endl;
+            fpW << line << std::endl;
+            first_line = false;
+            dataSection = true;
+        }
+        else if (line.length() == 0) {
+            // Do Nothing
+        }
+        else {
+            line.erase(0, 1);  // tab removed
+            params = splitString(line, " ");
 
-                /*
-                *  optimization: optimal code layout in memory
-                */
-                if (dataSection == false) {
-                    std::string instr = capitalizeString(params.front());
-                    struct match {
-                        match(std::string i) : _instr(i) {}
+            /*
+            *  optimization: optimal code layout in memory
+            */
+            if (!dataSection) {
+                std::string instr = capitalizeString(params.front());
+                struct match {
+                    explicit match(std::string i) : _instr(std::move(i)) {}
 
-                        bool operator()(INSTRUCTION instr) {
-                            return (instr.name == _instr);
-                        }
-
-                        std::string _instr;
-                    };
-                    std::vector<INSTRUCTION>::iterator it = std::find_if(uProcessor->lookup.begin(), uProcessor->lookup.end(), match(instr));
-                    bytesAllocated += it->bytes;
-                }
-
-                for (std::string str : params) {
-                    if (str[0] == '_') {
-                        routine x;
-                        x.name = str;
-                        if (!checkExists(routines, x)) {
-                            routines.push_back(x);
-                        }
+                    bool operator()(const INSTRUCTION& instr) const {
+                        return (instr.name == _instr);
                     }
-                    fpW << str << " ";
-                }
-                fpW << std::endl;
-            }
-        }
 
-        for (routine r : routines) {
-            std::cout << r.name << std::endl;
-            std::cout << register16(r.baseAddr) << std::endl;
+                    std::string _instr;
+                };
+                auto it = std::find_if(uProcessor->lookup.begin(), uProcessor->lookup.end(), match(instr));
+                bytesAllocated += it->bytes;
+            }
+
+            for (std::string str : params) {
+                if (str[0] == '_') {
+                    Routine x;
+                    x.name = str;
+                    if (!checkExists(routines, x)) {
+                        routines.push_back(x);
+                    }
+                }
+                fpW << str << " ";
+            }
+            fpW << std::endl;
         }
+    }
+
+    for (const Routine& r : routines) {
+        std::cout << r.name << std::endl;
+        std::cout << register16(r.baseAddr) << std::endl;
     }
 
     fpR.close();
     fpW.close();
 
-    /*
-        Formatting Operation 2 : temp.txt -> tmp.txt ============================================================================
-    */
+    return routines;
+}
+
+void Assembler::programParsingSecondOperation(std::vector<Routine> &routines) {
+    std::ifstream fpR;
+    std::ofstream fpW;
+
     fpR.open("temp.txt");
     fpW.open("tmp.txt");
 
@@ -150,7 +165,7 @@ void Assembler::formatProgram(std::string filePath, std::string outputPath) {
             // --- data: ---
             std::size_t dataLine = line.find("data");
             // --- _func: ---
-            bool routineLine = (line[0] == '_') ? true : false;
+            bool routineLine = (line[0] == '_');
 
             if (labelLine != std::string::npos) {
                 fpW << line << std::endl;
@@ -168,7 +183,7 @@ void Assembler::formatProgram(std::string filePath, std::string outputPath) {
                 params = splitString(line, " ");
                 for (std::string str : params) {
                     if (str[0] == '_') {
-                        routine x;
+                        Routine x;
                         x.name = str;
                         if (checkExists(routines, x)) {
                             fpW << "0x" << register16(getRoutineBaseAddress(routines, x.name)) << " ";
@@ -191,10 +206,12 @@ void Assembler::formatProgram(std::string filePath, std::string outputPath) {
 
     /* remove temp.txt file. */
     remove("temp.txt");
+}
 
-    /*
-        Formatting Operations III ==========================================================================================
-    */
+void Assembler::programParsingAndOutputGeneration() {
+    std::ifstream fpR;
+    std::ofstream fpW;
+
     fpR.open("tmp.txt");
     fpW.open("out.txt");
 
@@ -222,10 +239,10 @@ void Assembler::formatProgram(std::string filePath, std::string outputPath) {
             // --- data: ---
             std::size_t dataLine = line.find("data");
             // --- _func: ---
-            bool routineLine = (line[0] == '_') ? true : false;
+            bool routineLine = (line[0] == '_');
 
             if (labelLine != std::string::npos) {
-                if (firstline == false) fpW << std::endl;
+                if (!firstline) fpW << std::endl;
                 fpW << line << std::endl;
                 firstline = false;
                 dataSection = false;
@@ -237,7 +254,7 @@ void Assembler::formatProgram(std::string filePath, std::string outputPath) {
                 bytesWritten = 0;
             }
             else if (dataLine != std::string::npos) {
-                if (firstline == false) fpW << std::endl;
+                if (!firstline) fpW << std::endl;
                 fpW << line << std::endl;
                 firstline = false;
                 dataSection = true;
@@ -248,12 +265,12 @@ void Assembler::formatProgram(std::string filePath, std::string outputPath) {
             }
             else {  // Instruction Line
                 std::vector<std::string> params{};
-                // Line Splitted
+                // Line Split
                 params = splitString(line, " ");
 
                 // ====== INSTRUCTION HANDLING =====
 
-                if (dataSection == true) {
+                if (dataSection) {
                     fpW << line << std::endl;
                 }
                 else {
@@ -764,8 +781,6 @@ void Assembler::formatProgram(std::string filePath, std::string outputPath) {
 
     /* delete tmp.txt file*/
     remove("tmp.txt");
-
-    return;
 }
 
 /*
@@ -774,7 +789,7 @@ void Assembler::formatProgram(std::string filePath, std::string outputPath) {
 std::array<uint8_t, PROGRAM_DIM> Assembler::getProgram() {
 
     // Blank Program
-    uint8_t* program = new uint8_t[PROGRAM_DIM];
+    auto program = new uint8_t[PROGRAM_DIM];
     for (int i = 0; i < PROGRAM_DIM; i++) {
         program[i] = 0x00;
     }
@@ -808,7 +823,7 @@ std::array<uint8_t, PROGRAM_DIM> Assembler::getProgram() {
                 std::vector<std::string> bytes = splitString(line, " ");
 
                 // Bytes Line / Data Line
-                for (std::string str : bytes) {
+                for (const std::string& str : bytes) {
                     program[base] = fromStringToHex8(str);
                     base++;
                 }
@@ -829,7 +844,7 @@ std::array<uint8_t, PROGRAM_DIM> Assembler::getProgram() {
 */
 
 /* from a line to a vector of strings (slit based on a string delimiter) */
-std::vector<std::string> Assembler::splitString(std::string str, std::string str_delimiter) {
+std::vector<std::string> Assembler::splitString(std::string str, const std::string& str_delimiter) {
     std::vector<std::string> params{};
 
     size_t pos = 0;
@@ -846,7 +861,7 @@ std::vector<std::string> Assembler::splitString(std::string str, std::string str
     return params;
 }
 
-/* from string(containing a 2 characters hex number) to 8 bit number*/
+/* from string(containing a 2 characters hex number) to 8-bit number*/
 uint8_t Assembler::fromStringToHex8(std::string str) {
     uint8_t x = 0x00;
 
@@ -867,7 +882,7 @@ uint8_t Assembler::fromStringToHex8(std::string str) {
     return x;
 }
 
-/* from string(containing a 4 characters hex number) to 16 bit number*/
+/* from string(containing a 4 characters hex number) to 16-bit number*/
 uint16_t Assembler::fromStringToHex16(std::string str) {
     uint16_t x = 0x0000;
 
@@ -880,7 +895,7 @@ uint16_t Assembler::fromStringToHex16(std::string str) {
     uint16_t mask = 12;
     for (int i = 0; i < 4; i++) {
         char c = str[i];
-        uint16_t c_dec = (uint16_t) conversion.find_first_of(c, 0);
+        auto c_dec = (uint16_t) conversion.find_first_of(c, 0);
         x = x + (c_dec << mask);
         mask -= 4;
     }
@@ -888,7 +903,7 @@ uint16_t Assembler::fromStringToHex16(std::string str) {
     return x;
 }
 
-/* from 16 bit number to 4 character String of the number in Hex*/
+/* from 16-bit number to 4 character String of the number in Hex*/
 std::string Assembler::register16(uint16_t reg) {
     char hexString[10];
     sprintf(hexString, "%.4X", reg);
@@ -896,19 +911,14 @@ std::string Assembler::register16(uint16_t reg) {
 }
 
 /* Check if routine exists in vector */
-bool Assembler::checkExists(std::vector<routine> routines, routine x) {
-    for (routine r : routines) {
-        if (r.name == x.name) {
-            return true;
-        }
-    }
-    return false;
+bool Assembler::checkExists(const std::vector<Routine>& routines, const Routine& x) {
+    return std::any_of(routines.begin(), routines.end(), [x](const Routine& r) { return r.name == x.name; });
 }
 
 /* set <Base_Address> of an existing routine <Name> */
-int Assembler::setRoutineParams(std::vector<routine> &routines, std::string name, uint16_t baseAddr) {
-    routine x;
-    x.name = name;
+int Assembler::setRoutineParams(std::vector<Routine> &routines, std::string name, uint16_t baseAddr) {
+    Routine x;
+    x.name = std::move(name);
     x.baseAddr = baseAddr;
 
     if (!checkExists(routines, x)) return -1;
@@ -923,8 +933,8 @@ int Assembler::setRoutineParams(std::vector<routine> &routines, std::string name
 }
 
 /* get <Base_Address> of a routine <Name> */
-uint16_t Assembler::getRoutineBaseAddress(std::vector<routine> routines, std::string name) {
-    for (routine r : routines) {
+uint16_t Assembler::getRoutineBaseAddress(const std::vector<Routine>& routines, const std::string& name) {
+    for (const Routine& r : routines) {
         if (r.name == name) {
             return r.baseAddr;
         }

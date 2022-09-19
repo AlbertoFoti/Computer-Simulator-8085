@@ -73,37 +73,43 @@
 #include <memory>
 #include <algorithm>
 
+/* Sub_routine */
+struct Routine {
+    std::string name; // label
+    uint16_t baseAddr; // address chosen at assembly time for each routine
+};
+
 class Assembler
 {
 private:
     /* CPU module */
     std::shared_ptr<CPU> uProcessor;
 
-    /* Sub_routine */
-    struct routine{
-        std::string name; // label
-        uint16_t baseAddr; // address chosen at assembly time for each routine
-    };
-
 public:
     Assembler(std::shared_ptr<CPU> cpu);
     ~Assembler();
 
     /* from a source code to a formatted binary */
-    void formatProgram(std::string filePath, std::string outputPath);
+    void formatProgram(const std::string& filePath, const std::string& outputPath);
 
     /* from formatted binary to a program layout ready to load in a memory sector */
-    std::array<uint8_t, PROGRAM_DIM> getProgram();
+    static std::array<uint8_t, PROGRAM_DIM> getProgram();
 
 private:
     /* Auxiliary Functions */
-    std::vector<std::string> splitString(std::string str, std::string str_delimiter);
-    uint8_t fromStringToHex8(std::string str);
-    uint16_t fromStringToHex16(std::string str);
-    std::string register16(uint16_t reg);
-    bool checkExists(std::vector<routine> routines, routine x);
-    int setRoutineParams(std::vector<routine>& routines, std::string name, uint16_t baseAddr);
-    uint16_t getRoutineBaseAddress(std::vector<routine> routines, std::string name);
-    std::string capitalizeString(std::string s);
+    static std::vector<std::string> splitString(std::string str, const std::string& str_delimiter);
+    static uint8_t fromStringToHex8(std::string str);
+    static uint16_t fromStringToHex16(std::string str);
+    static std::string register16(uint16_t reg);
+    static bool checkExists(const std::vector<Routine>& routines, const Routine& x);
+    static int setRoutineParams(std::vector<Routine>& routines, std::string name, uint16_t baseAddr);
+    static uint16_t getRoutineBaseAddress(const std::vector<Routine>& routines, const std::string& name);
+    static std::string capitalizeString(std::string s);
+
+    std::vector<Routine> retrieveRoutinesAndParse(const std::string &filePath);
+
+    static void programParsingSecondOperation(std::vector<Routine> &routines);
+
+    static void programParsingAndOutputGeneration();
 };
 
