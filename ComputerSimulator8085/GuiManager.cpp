@@ -144,6 +144,7 @@ void GuiManager::Update()
     //this->ShowDemoPlot();
     //this->ShowFontTesting();
     this->ShowMainView();
+    this->ShowSimulationControlPanel();
     this->ShowMemory();
     this->ShowBus();
     this->ShowCPU();
@@ -207,6 +208,28 @@ void GuiManager::ShowSystemBusStatus() {
     } else {
         ImGui::Text("CPU not connected to Bus yet.");
     }
+}
+
+void GuiManager::ShowSimulationControlPanel()
+{
+    ImGui::Begin("Simulation Control");
+
+    if(ImGui::Button("Run")) {
+        this->computer->run();
+    }
+    ImGui::SameLine();
+
+    if(ImGui::Button("Stop")) {
+        // TODO : Stopping
+    }
+    ImGui::SameLine();
+
+    if(ImGui::Button("Step")) {
+        this->computer->step();
+    }
+
+
+    ImGui::End();
 }
 
 void GuiManager::ShowMainView()

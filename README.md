@@ -1,39 +1,41 @@
 # Computer Architecture Simulator
 
-Current Version : *0.2.1*
-
-### Future Objectives
-- Program Loading
-- Basic OS boot
-
-### Version 0.4.0 Objectives
-- Assembler
-
-### Version 0.3.0 Objectives
-- Emulation properly working
-- Stepping and running the CPU
-
-### Version 0.2.1 Feautures
-- Attaching CPU and RAM to BUS
-
-### Version 0.1.x Features
-- Project cleanup and better setup
-- 8085 Processor basic implementation
-- Bus system implementation
-
-### Version 0.0.x Features
-- Basic GUI (empty)
-- Project modular structure setup
-- Memory unit implementation
+Current Version : *0.2.2*
 
 # Intel 8085 Processor
-- Work in progress...
+![alt text](./images/unknown_022.png)
 
 # Computer Architecture
-- Work in progress...
+### System Bus
+![alt text](./images/unknown_023.png)
+### Main Memory (RAM)
+![alt text](./images/unknown_024.png)
 
 # Intel 8085 Assembler
 - Future versions...
 
 # Basic Operating System (OS) running
 - Future versions...
+
+### Version 1.x.x Objectives
+- Emulation properly working
+
+### Version 0.3.0 Objectives
+- Program Loading
+
+### Version 0.2.2 Features
+- Stepping and running the CPU
+
+### Version 0.x.x Features
+- Attaching CPU and RAM to BUS
+- Project cleanup and better setup
+- 8085 Processor basic implementation
+- Bus system implementation
+- Basic GUI (empty)
+- Project modular structure setup
+- Memory unit implementation
+
+### Future Objectives
+- CPU stopping
+- Basic OS boot
+- Assembler
