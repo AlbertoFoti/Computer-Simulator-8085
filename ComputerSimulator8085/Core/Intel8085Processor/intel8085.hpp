@@ -113,6 +113,7 @@ public:
     bool getSystemBusStatus();
 
     /* Auxiliary Functions */
+    uint16_t get_PC();
     void print();
 
     /* Control Signals */

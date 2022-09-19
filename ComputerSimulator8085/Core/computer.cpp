@@ -23,7 +23,7 @@ void Computer::step() {
 }
 
 bool Computer::getSystemBusStatus() {
-    this->intel8085cpu->getSystemBusStatus();
+    return this->intel8085cpu->getSystemBusStatus();
 }
 
 void Computer::loadProgram(std::array<uint8_t, PROGRAM_DIM> program, int sector) {
@@ -35,7 +35,7 @@ void Computer::printCPU() {
 }
 
 void Computer::printMemory() {
-    this->ram->print();
+    this->ram->print(this->intel8085cpu->get_PC());
 }
 
 void Computer::printBus() {

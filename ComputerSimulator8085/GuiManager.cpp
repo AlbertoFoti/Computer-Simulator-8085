@@ -140,7 +140,7 @@ void GuiManager::Update()
     }
 
     // Your GUIs go Here !
-    //this->ShowDemoWindow();
+    this->ShowDemoWindow();
     //this->ShowDemoPlot();
     //this->ShowFontTesting();
     //this->ShowMainView();
@@ -237,9 +237,12 @@ void GuiManager::ShowSimulationControlPanel()
 void GuiManager::ShowProgramLoadControlPanel() {
     ImGui::Begin("Program Load");
 
+    static int sector = 0;
+    ImGui::SliderInt("slider int", &sector, 0, MEM_DIM / PROGRAM_DIM - 1);
+
     if(ImGui::Button("Load")) {
         std::array<uint8_t, PROGRAM_DIM> program;
-        this->computer->loadProgram(program, 1);
+        this->computer->loadProgram(program, sector);
     }
 
     ImGui::End();

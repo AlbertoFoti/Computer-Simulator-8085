@@ -39,7 +39,7 @@
 		> max. 4 programs fit in memory simultaneously
 */
 #define MEM_DIM 512
-#define PROGRAM_DIM 128
+#define PROGRAM_DIM 256
 
 #define PADDING 20
 
@@ -72,5 +72,5 @@ public:
 	void set(uint8_t DATA);
 
 	/* Auxiliary Functions */
-	void print();
+	void print(uint16_t PC);
 };
