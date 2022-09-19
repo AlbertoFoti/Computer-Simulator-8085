@@ -151,6 +151,7 @@ void GuiManager::Update()
 
     this->ShowSimulationControlPanel();
     this->ShowProgramLoadControlPanel();
+    this->ShowErrorLogsPanel();
 
     ImGui::End();
 }
@@ -201,6 +202,14 @@ void GuiManager::ShowCPU() {
     this->computer->printCPU();
     ImGui::Separator();
     this->ShowSystemBusStatus();
+    ImGui::Separator();
+
+    static char str[20];
+    ImGui::Text("End Program: "); ImGui::SameLine();
+    bool endProgram = this->computer->endProgram();
+    if(endProgram) sprintf(str, "TRUE");
+    else sprintf(str, "FALSE");
+    ImGui::Text(str);
 
     ImGui::End();
 }
@@ -217,25 +226,29 @@ void GuiManager::ShowSimulationControlPanel()
 {
     ImGui::Begin("Simulation Control");
 
-    if(this->computer->running == false) {
+    if(this->computer->endProgram()) {
+        if(ImGui::Button("Reset")) {
+            this->computer->reset();
+        }
+    } else if(this->computer->running == false) {
         if(ImGui::Button("Run")) {
             this->computer->run();
-        }
-        ImGui::SameLine();
-
-        if(ImGui::Button("Stop")) {
-            // TODO : Stopping
         }
         ImGui::SameLine();
 
         if(ImGui::Button("Step")) {
             this->computer->step();
         }
+        ImGui::SameLine();
+        if(ImGui::Button("Reset")) {
+            this->computer->reset();
+        }
     } else {
         if(ImGui::Button("Stop")) {
             this->computer->running = false;
         }
         ImGui::SameLine();
+
         ImGui::Text("System is running...");
     }
 
@@ -249,8 +262,54 @@ void GuiManager::ShowProgramLoadControlPanel() {
     ImGui::SliderInt("slider int", &sector, 0, MEM_DIM / PROGRAM_DIM - 1);
 
     if(ImGui::Button("Load")) {
-        std::array<uint8_t, PROGRAM_DIM> program;
+        std::array<uint8_t, PROGRAM_DIM> program = {0};
+        program[0]  = 0x3A;
+        program[1]  = 0x40;
+        program[2]  = 0x00;
+        program[3]  = 0x47;
+        program[4]  = 0x3A;
+        program[5]  = 0x41;
+        program[6]  = 0x00;
+        program[7]  = 0x80;
+        program[8]  = 0x32;
+        program[9]  = 0x42;
+        program[10] = 0x00;
+        program[11] = 0x76;
+        program[64] = 0x05;
+        program[65] = 0x07;
+        /*
+        label 0x0000:
+        3A 40 00 47 3A 41 00 80
+        32 42 00
+        data 0x0040:
+        05 07
+         */
         this->computer->loadProgram(program, sector);
+    }
+
+    ImGui::End();
+}
+
+void GuiManager::ShowErrorLogsPanel() {
+    ImGui::Begin("Error Logs");
+
+    uint32_t status = this->computer->checkErrors();
+    static char code[50];
+    sprintf(code, "%08X", status);
+    ImGui::Text("COMPUTER STATUS CODE: "); ImGui::SameLine();
+    ImGui::Text(code);
+
+    if(status == 0x00000000) {
+        ImGui::Text("Program Operating Successfully. [POSITIVE]");
+    }
+    if(status == 0x00000001) {
+        ImGui::Text("Program Terminated Successfully. [POSITIVE]");
+    }
+    if(status == 0x00000002) {
+        ImGui::Text("Program running Successfully... [POSITIVE]");
+    }
+    if((status & 0x00000010) == 0x00000010) {
+        ImGui::Text("Memory Access Out of Bounds. [FATAL ERROR!]");
     }
 
     ImGui::End();

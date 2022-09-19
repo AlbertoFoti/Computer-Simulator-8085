@@ -1,30 +1,7 @@
 #include "intel8085.hpp"
 
 CPU::CPU() {
-    /* Register cleared */
-    this->PC = 0x0000;
-    this->SP = 0x0000;
-    this->IR = 0x00;
-    this->FR = 0x00;
-    this->temp = 0x00;
-    this->regA = 0x00;
-    this->regB = 0x00;
-    this->regC = 0x00;
-    this->regD = 0x00;
-    this->regE = 0x00;
-    this->regH = 0x00;
-    this->regL = 0x00;
-
-    /* Buffers cleared */
-    this->addrDataBuffer = 0x00;
-    this->highAddrBuffer = 0x00;
-
-    this->CTRL_SIG.iom = 0;
-    this->CTRL_SIG.S0 = 0;
-    this->CTRL_SIG.S1 = 0;
-    this->CTRL_SIG.ALE = 0;
-    this->CTRL_SIG.RDbar = 1;
-    this->CTRL_SIG.WRbar = 1;
+    this->reset();
 
     /* Lookup Instruction Table : 256 possible instructions/opcodes */
     using a = CPU;
@@ -55,31 +32,20 @@ CPU::~CPU() {}
 /*
 	Execution entry point
 */
-void CPU::run(bool& running) {
+uint32_t CPU::run(bool& running) {
     do {
-        if( !this->step() ) {
-            break;
+        uint32_t status_code = this->step();
+        if( status_code != 0x00000000 ) {
+            running = false;
+            return status_code;
         }
-
-        // Check end Program (HLT Instruction)
-        if (endProgram == true) {
-            std::cout << "HLT" << std::endl;
-            break;
-        }
-
-        // User input to continue to next cycle
-        std::cout << "Running...\n";
-
     } while (running == true);
-
-    std::cout << "Stopping..." << std::endl;
     running = false;
 }
 
-bool CPU::step() {
+uint32_t CPU::step() {
     if(this->PC > MEM_DIM ) {
-        std::cout << "Out of bounds !!!" << std::endl;
-        return false;
+        return 0x00000010;
     }
 
     // ------ Fetch ------
@@ -88,7 +54,41 @@ bool CPU::step() {
     // ------ Execute ------
     this->execute();
 
-    return true;
+    if(this->endProgram) {
+        return 0x00000001;
+    }
+
+    return 0x00000000;
+}
+
+void CPU::reset() {
+    this->PC = 0x0000;
+    this->endProgram = false;
+
+    /* Register cleared */
+    this->PC = 0x0000;
+    this->SP = 0x0000;
+    this->IR = 0x00;
+    this->FR = 0x00;
+    this->temp = 0x00;
+    this->regA = 0x00;
+    this->regB = 0x00;
+    this->regC = 0x00;
+    this->regD = 0x00;
+    this->regE = 0x00;
+    this->regH = 0x00;
+    this->regL = 0x00;
+
+    /* Buffers cleared */
+    this->addrDataBuffer = 0x00;
+    this->highAddrBuffer = 0x00;
+
+    this->CTRL_SIG.iom = 0;
+    this->CTRL_SIG.S0 = 0;
+    this->CTRL_SIG.S1 = 0;
+    this->CTRL_SIG.ALE = 0;
+    this->CTRL_SIG.RDbar = 1;
+    this->CTRL_SIG.WRbar = 1;
 }
 
 /*

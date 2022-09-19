@@ -15,6 +15,8 @@ private:
 	std::shared_ptr<Memory> ram;
     std::shared_ptr<Bus> bus;
 
+    uint32_t COMPUTER_STATUS_CODES = 0x00000000;
+
 public:
     bool running;
 
@@ -22,13 +24,18 @@ public:
     ~Computer();
 
 	/* Entry point for system execution */
-	void run();
+    uint32_t run();
 
     /* step execution */
-    void step();
+    uint32_t step();
+
+    /* reset */
+    void reset();
 
     /* Status */
     bool getSystemBusStatus();
+    bool endProgram();
+    uint32_t checkErrors();
 
     /* Memory Interfacing */
     void loadProgram(std::array<uint8_t, PROGRAM_DIM> program, int sector);
