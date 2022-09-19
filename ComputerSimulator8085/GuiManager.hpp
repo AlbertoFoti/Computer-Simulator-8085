@@ -5,7 +5,7 @@
 #include "imgui_impl_opengl3.h"
 #include "implot.h"
 #include "implot_internal.h"
-#include "Core/computer.hpp"
+#include "Core/Computer.hpp"
 #include <iostream>
 #include <math.h>
 #include <climits>
