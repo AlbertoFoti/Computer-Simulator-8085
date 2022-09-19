@@ -3,6 +3,10 @@ add_library(
 	intel8085.hpp intel8085.cpp
 )
 
+add_subdirectory("Assembler")
+
+target_link_libraries(Intel8085Processor PRIVATE Assembler)
+
 find_package(imgui CONFIG REQUIRED)
 target_link_libraries(Intel8085Processor PRIVATE imgui::imgui)
 

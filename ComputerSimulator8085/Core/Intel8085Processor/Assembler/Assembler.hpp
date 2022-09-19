@@ -64,9 +64,9 @@
 
 #pragma once
 
-#include "../Core/namespaceDeclaration.h"
-#include "../Core/Intel8085Processor/intel8085.hpp"
-#include "../Core/Memory/Memory.hpp"
+#include "../../namespaceDeclaration.h"
+#include "../intel8085.hpp"
+#include "../../Memory/Memory.hpp"
 #include <string>
 #include <fstream>
 #include <vector>

@@ -15,11 +15,9 @@ add_executable (${PROJECT_NAME} "main.cpp" ${Sources})
 # sub directories
 add_subdirectory("assets")
 add_subdirectory("Core")
-add_subdirectory("Assembler")
 
 # Dependencies Targets
 target_link_libraries(${PROJECT_NAME} PRIVATE Computer)
-target_link_libraries(${PROJECT_NAME} PRIVATE Assembler)
 target_link_libraries(${PROJECT_NAME} PRIVATE glad::glad)
 target_link_libraries(${PROJECT_NAME} PRIVATE glfw)
 target_link_libraries(${PROJECT_NAME} PRIVATE imgui::imgui)

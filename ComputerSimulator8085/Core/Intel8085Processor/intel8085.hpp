@@ -57,6 +57,7 @@
 
 #include "../namespaceDeclaration.h"
 #include "../Bus/Bus.hpp"
+#include "Assembler/Assembler.hpp"
 #include <memory>
 #include <vector>
 
