@@ -1,6 +1,13 @@
 # Computer Architecture Simulator
 
-Current Version : *0.4.0*
+Current Stable Version : **Version 1.0.0**
+
+## License and Copyright
+� 2022 Alberto Foti. All Rights Reserved.
+
+## For Final Users
+There isn't a proper installation procedure yet. (The product is still in development)
+
 
 # Intel 8085 Processor
 ![alt text](./images/unknown_022.png)
@@ -17,11 +24,17 @@ Current Version : *0.4.0*
 # Basic Operating System (OS) running
 - Future versions...
 
+
+
 # Versioning
 ### Version 1.x.x Objectives
-- Manual Loading of a program binary (machine code)
+- Example Programs
+
+### Version 1.1.0 Objectives
+- Basic Assembler implementation
 
 ### Version 0.x.x Features
+- Manual Loading of a program binary (machine code)
 - CPU stopping
 - Running properly
 - Program Loading
@@ -36,4 +49,9 @@ Current Version : *0.4.0*
 
 ### Future Objectives
 - Basic OS boot
-- Assembler
+
+## Libraries Used and other Dependencies
+- vcpkg library manager <br>
+- ImGui library (docking branch)
+- Font list: Blender Pro, Roboto<br>
+<div>Font made from <a href="http://www.onlinewebfonts.com">oNline Web Fonts</a> is licensed by CC BY 3.0</div>
