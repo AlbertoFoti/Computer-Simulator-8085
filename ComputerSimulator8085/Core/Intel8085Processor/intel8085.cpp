@@ -27,7 +27,7 @@ CPU::CPU() {
             };
 }
 
-CPU::~CPU() {}
+CPU::~CPU() = default;
 
 /*
 	Execution entry point
@@ -39,7 +39,7 @@ uint32_t CPU::run(bool& running) {
             running = false;
             return status_code;
         }
-    } while (running == true);
+    } while (running);
     running = false;
 }
 
@@ -151,8 +151,8 @@ void CPU::MWMC(uint16_t ADDR, uint8_t DATA) {
 /*
 	Link to system bus
 */
-void CPU::attachBus(std::shared_ptr<Bus> bus) {
-    this->bus = bus;
+void CPU::attachBus(std::shared_ptr<Bus> bus_) {
+    this->bus = bus_;
 }
 
 bool CPU::getSystemBusStatus() {
@@ -167,129 +167,95 @@ bool CPU::getSystemBusStatus() {
 	Auxiliary Functions
 */
 
-uint16_t CPU::get_PC() {
+uint16_t CPU::get_PC() const {
     return this->PC;
 }
 
-void CPU::print() {
+void CPU::print() const {
     static char hex_string[10];
 
     ImGui::Text("PC :"); ImGui::SameLine();
     sprintf(hex_string, "0x%02X", this->PC);
-    ImGui::Text(hex_string);
+    ImGui::Text("%s", hex_string);
 
     ImGui::Text("SP :"); ImGui::SameLine();
     sprintf(hex_string, "0x%02X", this->SP);
-    ImGui::Text(hex_string);
+    ImGui::Text("%s", hex_string);
 
     ImGui::Text("IR :"); ImGui::SameLine();
     sprintf(hex_string, "0x%02X", this->IR);
-    ImGui::Text(hex_string);
+    ImGui::Text("%s", hex_string);
 
     ImGui::Text("FR :"); ImGui::SameLine();
     sprintf(hex_string, "0x%02X", this->FR);
-    ImGui::Text(hex_string);
+    ImGui::Text("%s", hex_string);
 
     ImGui::Text("FR :"); ImGui::SameLine();
     sprintf(hex_string, "0x%02X", this->FR);
-    ImGui::Text(hex_string);
+    ImGui::Text("%s", hex_string);
 
     ImGui::Separator();
     ImGui::Text("Registers");
 
     ImGui::Text("RA :"); ImGui::SameLine();
     sprintf(hex_string, "0x%02X", this->regA);
-    ImGui::Text(hex_string);
+    ImGui::Text("%s", hex_string);
 
     ImGui::Text("RB :"); ImGui::SameLine();
     sprintf(hex_string, "0x%02X", this->regB);
-    ImGui::Text(hex_string);
+    ImGui::Text("%s", hex_string);
 
     ImGui::Text("RC :"); ImGui::SameLine();
     sprintf(hex_string, "0x%02X", this->regC);
-    ImGui::Text(hex_string);
+    ImGui::Text("%s", hex_string);
 
     ImGui::Text("RD :"); ImGui::SameLine();
     sprintf(hex_string, "0x%02X", this->regD);
-    ImGui::Text(hex_string);
+    ImGui::Text("%s", hex_string);
 
     ImGui::Text("RE :"); ImGui::SameLine();
     sprintf(hex_string, "0x%02X", this->regE);
-    ImGui::Text(hex_string);
+    ImGui::Text("%s", hex_string);
 
     ImGui::Text("RH :"); ImGui::SameLine();
     sprintf(hex_string, "0x%02X", this->regH);
-    ImGui::Text(hex_string);
+    ImGui::Text("%s", hex_string);
 
     ImGui::Text("RL :"); ImGui::SameLine();
     sprintf(hex_string, "0x%02X", this->regL);
-    ImGui::Text(hex_string);
+    ImGui::Text("%s", hex_string);
 
     ImGui::Text("TMP:"); ImGui::SameLine();
     sprintf(hex_string, "0x%02X", this->temp);
-    ImGui::Text(hex_string);
+    ImGui::Text("%s", hex_string);
 
     ImGui::Separator();
 
     ImGui::Text("AD0-AD7 :"); ImGui::SameLine();
     sprintf(hex_string, "0x%02X", this->addrDataBuffer);
-    ImGui::Text(hex_string);
+    ImGui::Text("%s", hex_string);
 
     ImGui::Text("A7-A15  :"); ImGui::SameLine();
     sprintf(hex_string, "0x%02X", this->highAddrBuffer);
-    ImGui::Text(hex_string);
-
-    /*
-    std::cout << "---- 8085 uProcessor --------------------\n";
-    std::cout << ">  PC: 0x";
-    this->printRegister16(this->PC);
-    std::cout << ">  SP: 0x";
-    this->printRegister16(this->SP);
-    std::cout << ">  IR: 0x";
-    this->printRegister8(this->IR);
-    std::cout << ">  FR: 0x";
-    this->printRegister8(this->FR);
-
-    std::cout << ">  RA : 0x";
-    this->printRegister8(this->regA);
-    std::cout << ">  RB : 0x";
-    this->printRegister8(this->regB);
-    std::cout << ">  RC : 0x";
-    this->printRegister8(this->regC);
-    std::cout << ">  RD : 0x";
-    this->printRegister8(this->regD);
-    std::cout << ">  RE : 0x";
-    this->printRegister8(this->regE);
-    std::cout << ">  RH : 0x";
-    this->printRegister8(this->regH);
-    std::cout << ">  RL : 0x";
-    this->printRegister8(this->regL);
-    std::cout << ">  TMP: 0x";
-    this->printRegister8(this->temp);
-
-    std::cout << ">  AD0-AD7:  0x";
-    this->printRegister8(this->AddrDataBuffer);
-    std::cout << ">  A7-A15 :  0x";
-    this->printRegister8(this->HighAddrBuffer);
-    */
+    ImGui::Text("%s", hex_string);
 }
 
 
 /* --- Addressing Modes ---  (NOT USED !!) */
 
-uint8_t CPU::IMM() {
+[[maybe_unused]] uint8_t CPU::IMM() {
     return 0;
 }
 
-uint8_t CPU::REG() {
+[[maybe_unused]] uint8_t CPU::REG() {
     return 0;
 }
 
-uint8_t CPU::DIR() {
+[[maybe_unused]] uint8_t CPU::DIR() {
     return 0;
 }
 
-uint8_t CPU::IND() {
+[[maybe_unused]] uint8_t CPU::IND() {
     return 0;
 }
 
@@ -318,6 +284,8 @@ uint8_t CPU::MOV() {
             break;
         case 0x07:
             if (IR < 0x78) MOVm_utility(offset); else MOV_utility(regA, offset);
+            break;
+        default:
             break;
     }
 
@@ -873,10 +841,10 @@ uint8_t CPU::ANA() {
             temp = this->addrDataBuffer;
             regA = temp & regA;
             break;
+        default:
+            break;
     }
-
-
-    return 0;
+    return 0x00;
 }
 
 uint8_t CPU::ORA() {
@@ -1261,6 +1229,8 @@ void CPU::MOV_utility(uint8_t& reg, uint8_t offset) {
         case 0x07: // mov X, A
             reg = regA;
             break;
+        default:
+            break;
     }
 }
 
@@ -1292,6 +1262,8 @@ void CPU::MOVm_utility(uint8_t offset) {
         case 0x07: // mov m, A
             data = regA;
             break;
+        default:
+            data = 0x00;
     }
 
     // Retrieve address m from HL register pair
@@ -1307,18 +1279,4 @@ void CPU::MOVm_utility(uint8_t offset) {
 uint16_t CPU::getMfromRegPair(uint8_t reg1, uint8_t reg2) {
     uint16_t m = (((uint16_t)reg1) << 8) + ((uint16_t)reg2);
     return m;
-}
-
-/* Print 16 bit register in Hex */
-void CPU::printRegister16(uint16_t reg) {
-    char hexString[50];
-    sprintf(hexString, "%.4X\n", reg);
-    std::cout << hexString;
-}
-
-/* Print 8 bit register in Hex */
-void CPU::printRegister8(uint8_t reg) {
-    char hexString[50];
-    sprintf(hexString, "%.2X\n", reg);
-    std::cout << hexString;
 }

@@ -35,7 +35,7 @@ public:
     /* Status */
     bool getSystemBusStatus();
     bool endProgram();
-    uint32_t checkErrors();
+    uint32_t checkErrors() const;
 
     /* Memory Interfacing */
     void loadProgram(std::array<uint8_t, PROGRAM_DIM> program, int sector);

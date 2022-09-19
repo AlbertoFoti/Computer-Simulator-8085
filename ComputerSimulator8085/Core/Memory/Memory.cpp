@@ -5,9 +5,7 @@ Memory::Memory() {
 	this->ADDR_LATCH = 0x0000;
 }
 
-Memory::~Memory() {
-
-}
+Memory::~Memory() = default;
 
 /* 
 	load memory layout into memory 
@@ -21,7 +19,7 @@ void Memory::load(std::array<uint8_t, MEM_DIM> memLayout) {
 */
 void Memory::loadProgram(std::array<uint8_t, PROGRAM_DIM> program, int sector) {
 	if (sector >= (MEM_DIM / PROGRAM_DIM)) {
-		std::cout << "\n\n --- Error --- __PROGRAM_INVALID_LOADING_SECTOR_LIMIT_EXCEDEED__ \n\n";
+		std::cout << "\n\n --- Error --- __PROGRAM_INVALID_LOADING_SECTOR_LIMIT_EXCEEDED__ \n\n";
 		return;
 	}
 
@@ -82,7 +80,7 @@ void Memory::print(uint16_t PC) {
             if (PC == 0) {
                 if(x == 0 && y == 0) selected = true;
             } else {
-                selected = ((x == PC/cols) ? true : false) && ((y == PC%cols) ? true : false);
+                selected = (x == PC / cols) && (y == PC % cols);
             }
             if (ImGui::Selectable(hex_string, selected, 0, ImVec2(20, 20)))
             {

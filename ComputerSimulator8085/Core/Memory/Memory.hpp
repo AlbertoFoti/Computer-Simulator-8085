@@ -48,7 +48,7 @@ class Memory
 private:
 	/* Memory unit */
 	//uint8_t* mem;
-    std::array<uint8_t, MEM_DIM> mem;
+    std::array<uint8_t, MEM_DIM> mem{};
 
 	/* Memory Address buffer (latched) */
 	uint16_t ADDR_LATCH;

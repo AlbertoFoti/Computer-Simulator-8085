@@ -7,7 +7,7 @@
 #include "implot_internal.h"
 #include "Core/Computer.hpp"
 #include <iostream>
-#include <math.h>
+#include <cmath>
 #include <climits>
 #include <string>
 #include <memory>
@@ -85,7 +85,7 @@ private:
     /**
      * @brief Show Program Loading Panel
      */
-    void ShowProgramLoadControlPanel();
+    void ShowProgramEditorPanel();
 
     /**
      * @brief Show Error Log Panel
