@@ -3,10 +3,12 @@
 /*
 	Constructor
 */
-Assembler::Assembler(CPU* cpu) {
+Assembler::Assembler(std::shared_ptr<CPU> cpu) {
     // __init__
     this->uProcessor = cpu;
 }
+
+Assembler::~Assembler() {}
 
 /*
 	from a source code to a formatted binary
@@ -769,7 +771,7 @@ void Assembler::formatProgram(std::string filePath, std::string outputPath) {
 /*
 	from formatted binary to a program layout ready to load in a memory sector
 */
-uint8_t* Assembler::getProgram() {
+std::array<uint8_t, PROGRAM_DIM> Assembler::getProgram() {
 
     // Blank Program
     uint8_t* program = new uint8_t[PROGRAM_DIM];
@@ -819,7 +821,7 @@ uint8_t* Assembler::getProgram() {
     /* delete out.txt file and return */
     remove("out.txt");
 
-    return program;
+    return reinterpret_cast<const std::array<uint8_t, PROGRAM_DIM> &>(program);
 }
 
 /*
@@ -884,13 +886,6 @@ uint16_t Assembler::fromStringToHex16(std::string str) {
     }
 
     return x;
-}
-
-/* print 16 bit number to Screen in Hex (4 characters) */
-void Assembler::printRegister16(uint16_t reg) {
-    char hexString[50];
-    sprintf(hexString, "%.4X\n", reg);
-    std::cout << hexString;
 }
 
 /* from 16 bit number to 4 character String of the number in Hex*/

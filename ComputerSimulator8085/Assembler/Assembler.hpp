@@ -68,16 +68,16 @@
 #include "../Core/Intel8085Processor/intel8085.hpp"
 #include "../Core/Memory/Memory.hpp"
 #include <string>
-
 #include <fstream>
 #include <vector>
+#include <memory>
 #include <algorithm>
 
 class Assembler
 {
 private:
     /* CPU module */
-    CPU* uProcessor;
+    std::shared_ptr<CPU> uProcessor;
 
     /* Sub_routine */
     struct routine{
@@ -86,19 +86,20 @@ private:
     };
 
 public:
-    /* Constructor */
-    Assembler(CPU* cpu);
+    Assembler(std::shared_ptr<CPU> cpu);
+    ~Assembler();
+
     /* from a source code to a formatted binary */
     void formatProgram(std::string filePath, std::string outputPath);
+
     /* from formatted binary to a program layout ready to load in a memory sector */
-    uint8_t* getProgram();
+    std::array<uint8_t, PROGRAM_DIM> getProgram();
 
 private:
     /* Auxiliary Functions */
     std::vector<std::string> splitString(std::string str, std::string str_delimiter);
     uint8_t fromStringToHex8(std::string str);
     uint16_t fromStringToHex16(std::string str);
-    void printRegister16(uint16_t reg);
     std::string register16(uint16_t reg);
     bool checkExists(std::vector<routine> routines, routine x);
     int setRoutineParams(std::vector<routine>& routines, std::string name, uint16_t baseAddr);
