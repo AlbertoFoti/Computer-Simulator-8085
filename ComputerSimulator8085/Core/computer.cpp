@@ -9,13 +9,18 @@ Computer::Computer() {
     this->bus = std::make_shared<Bus>();
 
     this->bus->attach(this->intel8085cpu, this->ram);
+
+    this->running = false;
 }
+
+Computer::~Computer() {}
 
 /* 
 	Entry point for system execution 
 */
 void Computer::run() {
-    this->intel8085cpu->run();
+    this->running = true;
+    this->intel8085cpu->run(this->running);
 }
 
 void Computer::step() {

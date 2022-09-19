@@ -217,18 +217,26 @@ void GuiManager::ShowSimulationControlPanel()
 {
     ImGui::Begin("Simulation Control");
 
-    if(ImGui::Button("Run")) {
-        this->computer->run();
-    }
-    ImGui::SameLine();
+    if(this->computer->running == false) {
+        if(ImGui::Button("Run")) {
+            this->computer->run();
+        }
+        ImGui::SameLine();
 
-    if(ImGui::Button("Stop")) {
-        // TODO : Stopping
-    }
-    ImGui::SameLine();
+        if(ImGui::Button("Stop")) {
+            // TODO : Stopping
+        }
+        ImGui::SameLine();
 
-    if(ImGui::Button("Step")) {
-        this->computer->step();
+        if(ImGui::Button("Step")) {
+            this->computer->step();
+        }
+    } else {
+        if(ImGui::Button("Stop")) {
+            this->computer->running = false;
+        }
+        ImGui::SameLine();
+        ImGui::Text("System is running...");
     }
 
     ImGui::End();

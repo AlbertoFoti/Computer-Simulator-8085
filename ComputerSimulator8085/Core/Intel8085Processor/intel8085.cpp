@@ -55,32 +55,40 @@ CPU::~CPU() {}
 /*
 	Execution entry point
 */
-void CPU::run() {
-    return;
-
-    char ans = 'N';
+void CPU::run(bool& running) {
     do {
-        this->step();
+        if( !this->step() ) {
+            break;
+        }
 
         // Check end Program (HLT Instruction)
         if (endProgram == true) {
+            std::cout << "HLT" << std::endl;
             break;
         }
 
         // User input to continue to next cycle
-        std::cout << "> Do you want to continue (Y/N)?\n";
-        std::cout << "> You must type a 'Y' or an 'N' :";
-        std::cin >> ans;
+        std::cout << "Running...\n";
 
-    } while ((ans == 'Y') || (ans == 'y'));
+    } while (running == true);
+
+    std::cout << "Stopping..." << std::endl;
+    running = false;
 }
 
-void CPU::step() {
+bool CPU::step() {
+    if(this->PC > MEM_DIM ) {
+        std::cout << "Out of bounds !!!" << std::endl;
+        return false;
+    }
+
     // ------ Fetch ------
     this->OFMC();
 
     // ------ Execute ------
     this->execute();
+
+    return true;
 }
 
 /*

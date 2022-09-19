@@ -97,10 +97,10 @@ public:
     ~CPU();
 
     /* Execution entry point */
-    void run();
+    void run(bool& running);
 
     /* Step Execution */
-    void step();
+    bool step();
 
     /* Cycles and procedures */
     void OFMC();  // Opcode fetch Machine Cycle

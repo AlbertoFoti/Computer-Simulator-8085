@@ -16,8 +16,10 @@ private:
     std::shared_ptr<Bus> bus;
 
 public:
-	/* Constructor */
+    bool running;
+
 	Computer();
+    ~Computer();
 
 	/* Entry point for system execution */
 	void run();
