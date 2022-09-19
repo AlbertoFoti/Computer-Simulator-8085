@@ -232,7 +232,6 @@ void Assembler::programParsingAndOutputGeneration() {
                                  - in code section : replace instructions with opcodes and format addresses and immediate values
         */
         while (getline(fpR, line)) {
-            std::cout << line << std::endl;
 
             // --- label 0x0000 ---
             std::size_t labelLine = line.find("label");
@@ -789,7 +788,7 @@ void Assembler::programParsingAndOutputGeneration() {
 std::array<uint8_t, PROGRAM_DIM> Assembler::getProgram() {
 
     // Blank Program
-    auto program = new uint8_t[PROGRAM_DIM];
+    std::array<uint8_t, PROGRAM_DIM> program;
     for (int i = 0; i < PROGRAM_DIM; i++) {
         program[i] = 0x00;
     }

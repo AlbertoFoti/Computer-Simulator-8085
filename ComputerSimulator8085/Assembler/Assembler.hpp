@@ -107,9 +107,7 @@ private:
     static std::string capitalizeString(std::string s);
 
     std::vector<Routine> retrieveRoutinesAndParse(const std::string &filePath);
-
     static void programParsingSecondOperation(std::vector<Routine> &routines);
-
     static void programParsingAndOutputGeneration();
 };
 

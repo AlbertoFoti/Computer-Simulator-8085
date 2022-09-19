@@ -6,6 +6,7 @@
 #include "implot.h"
 #include "implot_internal.h"
 #include "Core/Computer.hpp"
+#include "Assembler/Assembler.hpp"
 #include <iostream>
 #include <cmath>
 #include <climits>

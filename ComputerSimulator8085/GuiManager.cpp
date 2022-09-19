@@ -1,4 +1,5 @@
 #include "GuiManager.hpp"
+#include <fstream>
 
 #define IM_CLAMP(V, MN, MX)     ((V) < (MN) ? (MN) : (V) > (MX) ? (MX) : (V))
 
@@ -298,20 +299,38 @@ void GuiManager::ShowProgramEditorPanel() {
     }
 
     static char text[1024 * 16] =
-            "/*\n"
-            " The Pentium F00F bug, shorthand for F0 0F C7 C8,\n"
-            " the hexadecimal encoding of one offending instruction,\n"
-            " more formally, the invalid operand with locked CMPXCHG8B\n"
-            " instruction bug, is a design flaw in the majority of\n"
-            " Intel Pentium, Pentium MMX, and Pentium OverDrive\n"
-            " processors (all in the P5 microarchitecture).\n"
-            "*/\n\n"
-            "label:\n"
-            "\tlock cmpxchg8b eax\n";
+            "label 0x0000:\n"
+            "\tlda 0x0040\n"
+            "\tmov B, A\n"
+            "\tlda 0x0041\n"
+            "\tadd B\n"
+            "\tsta 0x0042\n"
+            "\n"
+            "data 0x0040:\n"
+            "\t05 07\n";
 
-    static ImGuiInputTextFlags flags = ImGuiInputTextFlags_AllowTabInput;
-    ImGui::CheckboxFlags("ImGuiInputTextFlags_AllowTabInput", &flags, ImGuiInputTextFlags_AllowTabInput);
-    ImGui::InputTextMultiline("##source", text, IM_ARRAYSIZE(text), ImVec2(-FLT_MIN, ImGui::GetTextLineHeight() * 16), flags);
+    ImGui::InputTextMultiline("##source", text, IM_ARRAYSIZE(text), ImVec2(-FLT_MIN, ImGui::GetTextLineHeight() * 16), ImGuiInputTextFlags_AllowTabInput);
+
+    if(ImGui::Button("Save and Load")) {
+        std::string temp_outfile = "prog.txt";
+        std::string out_file = "out.txt";
+
+        // Save to File prog.txt
+        std::ofstream fpW;
+        fpW.open(temp_outfile);
+        fpW << text;
+        fpW.close();
+
+        // Assembler to generate output code [ source.txt -> out.txt ]
+        std::shared_ptr<Assembler> assembler = std::make_shared<Assembler>(this->computer->getCPU());
+        assembler->formatProgram(temp_outfile, "out.txt");
+
+        // Program code layout construction
+        auto program = assembler->getProgram();
+
+        // MEMORY Program Load
+        this->computer->loadProgram(program, sector);
+    }
 
     ImGui::End();
 }

@@ -51,6 +51,10 @@ bool Computer::endProgram() {
     return this->intel8085cpu->endProgram;
 }
 
+std::shared_ptr<CPU> Computer::getCPU() {
+    return this->intel8085cpu;
+}
+
 void Computer::loadProgram(std::array<uint8_t, PROGRAM_DIM> program, int sector) {
     this->ram->loadProgram(program, sector);
 }
