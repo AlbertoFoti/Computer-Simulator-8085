@@ -140,7 +140,7 @@ void GuiManager::Update()
     }
 
     // Your GUIs go Here !
-    //this->ShowDemoWindow();
+    this->ShowDemoWindow();
     //this->ShowDemoPlot();
     //this->ShowFontTesting();
     //this->ShowMainView();
@@ -255,28 +255,44 @@ void GuiManager::ShowSimulationControlPanel()
     ImGui::End();
 }
 
+uint8_t hexCharToUint8(char c) {
+    switch ( c ) {
+        case '0': return 0x00;
+        case '2': return 0x02;
+        case '1': return 0x01;
+        case '3': return 0x03;
+        case '4': return 0x04;
+        case '5': return 0x05;
+        case '6': return 0x06;
+        case '7': return 0x07;
+        case '8': return 0x08;
+        case '9': return 0x09;
+        case 'A': return 0x0A;
+        case 'B': return 0x0B;
+        case 'C': return 0x0C;
+        case 'D': return 0x0D;
+        case 'E': return 0x0E;
+        case 'F': return 0x0F;
+        return 0x00;
+    }
+}
+
 void GuiManager::ShowProgramLoadControlPanel() {
     ImGui::Begin("Program Load");
 
     static int sector = 0;
     ImGui::SliderInt("slider int", &sector, 0, MEM_DIM / PROGRAM_DIM - 1);
 
+    static char buf3[PROGRAM_DIM] = {};
+    ImGui::InputText("hexadecimal", buf3, PROGRAM_DIM, ImGuiInputTextFlags_CharsHexadecimal | ImGuiInputTextFlags_CharsUppercase);
+
     if(ImGui::Button("Load")) {
         std::array<uint8_t, PROGRAM_DIM> program = {0};
-        program[0]  = 0x3A;
-        program[1]  = 0x40;
-        program[2]  = 0x00;
-        program[3]  = 0x47;
-        program[4]  = 0x3A;
-        program[5]  = 0x41;
-        program[6]  = 0x00;
-        program[7]  = 0x80;
-        program[8]  = 0x32;
-        program[9]  = 0x42;
-        program[10] = 0x00;
-        program[11] = 0x76;
-        program[64] = 0x05;
-        program[65] = 0x07;
+        for (int i=0; i< strlen(buf3); i+=2) {
+            uint8_t u = hexCharToUint8(buf3[i]);
+            uint8_t l = hexCharToUint8(buf3[i+1]);
+            program[i/2] = (u << 4) | l;
+        }
         /*
         label 0x0000:
         3A 40 00 47 3A 41 00 80
