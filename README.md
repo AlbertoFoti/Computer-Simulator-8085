@@ -1,6 +1,6 @@
 # Computer Architecture Simulator
 
-Current Version : *0.2.0*
+Current Version : *0.2.1*
 
 ### Future Objectives
 - Program Loading
@@ -13,7 +13,7 @@ Current Version : *0.2.0*
 - Emulation properly working
 - Stepping and running the CPU
 
-### Version 0.2.1 Objectives
+### Version 0.2.1 Feautures
 - Attaching CPU and RAM to BUS
 
 ### Version 0.1.x Features

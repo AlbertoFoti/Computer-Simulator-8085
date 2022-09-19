@@ -72,6 +72,11 @@ private:
      */
     void ShowCPU();
 
+    /**
+     * @brief Show CPU connection status to system bus
+     */
+    void ShowSystemBusStatus();
+
 	/**
 	 * @brief Central View Rendering
 	 * 

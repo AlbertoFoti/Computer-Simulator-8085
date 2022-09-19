@@ -1,4 +1,5 @@
 #include "Bus.hpp"
+#include "../Intel8085Processor/intel8085.hpp"
 
 Bus::Bus() {
     this->multiplexedWord = 0x00;
@@ -15,9 +16,14 @@ Bus::~Bus() {
 /*
 	Attach Modules to bus
 */
-/*
-void Bus::attach(CPU* cpu, Memory* ram) {
-    cpu->attachBus(this);
+void Bus::attach(std::weak_ptr<CPU> cpu, std::shared_ptr<Memory> ram) {
+    if (std::shared_ptr<CPU> cpu_shared = cpu.lock()) {
+        std::cout << "Attaching cpu to bus" << std::endl;
+        cpu_shared->attachBus(static_cast<std::shared_ptr<Bus>>(this));
+    }
+    else {
+        std::cout << "No CPU found. Object destroyed. \n";
+    }
 
     this->cpu = cpu;
     this->ram = ram;
