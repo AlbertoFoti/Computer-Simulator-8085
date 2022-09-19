@@ -77,6 +77,11 @@ private:
      */
     void ShowSystemBusStatus();
 
+    /**
+     * @brief Show Simulation Control Panel (start, stop, step the simulation)
+     */
+    void ShowSimulationControlPanel();
+
 	/**
 	 * @brief Central View Rendering
 	 * 

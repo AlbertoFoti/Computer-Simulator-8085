@@ -56,13 +56,7 @@ CPU::~CPU() {}
 	Execution entry point
 */
 void CPU::run() {
-    if( this->bus == nullptr ) {
-        ImGui::Text("CPU not connected to Bus yet.");
-        return;
-    } else {
-        ImGui::Text("CPU correctly connected to System Bus.");
-        return;
-    }
+    return;
 
     char ans = 'N';
     do {
@@ -110,11 +104,6 @@ void CPU::OFMC() {
 void CPU::execute() {
     //(this->*lookup[IR].addrmode)();
     (this->*lookup[IR].operate)();
-
-    // print results to Screen
-    this->print();
-    this->bus->print();
-    this->bus->printMemory();
 }
 
 /* Machine Read Machine Cycle */

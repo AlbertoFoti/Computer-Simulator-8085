@@ -15,12 +15,10 @@ Computer::Computer() {
 	Entry point for system execution 
 */
 void Computer::run() {
-    //std::cout << "Computer Running..." << std::endl;
     this->intel8085cpu->run();
 }
 
 void Computer::step() {
-    //std::cout << "Computer Stepping..." << std::endl;
     this->intel8085cpu->step();
 }
 
